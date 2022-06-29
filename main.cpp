@@ -5,12 +5,22 @@
 using namespace std;
 
 int main() {
-    int num;
-    cin >> num;
+    int x,y,maxX,maxY;
+    cin>>x>>y>>maxX>>maxY;
 
-    for(int i=1;i<=num;i++){
-        cout<<i<<"\n";
+    int small=x;
+
+    if(small>y){
+        small=y;
     }
+    if(small>maxX-x){
+        small=maxX-x;
+    }
+    if(small>maxY-y){
+        small=maxY-y;
+    }
+
+    cout<<small;
 
 
 
