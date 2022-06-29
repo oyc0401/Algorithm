@@ -53,12 +53,12 @@ void setPrimeNumbers(int n, vector<int> &primes) {
 void sethowmuch(int number, map<int, int> &myMap, vector<int> &primes) {
     for (int prime: primes) {
 
-      int sum=0;
+        int sum = 0;
         for (long long int power = prime; power <= number; power *= prime) {
-           // cout<<sum<<endl;
-            sum+=(number/power);
+            // cout<<sum<<endl;
+            sum += (number / power);
         }
-        myMap[prime]=sum;
+        myMap[prime] = sum;
     }
 }
 // 937482931 264783641 100000
@@ -74,7 +74,7 @@ int main() {
     setPrimeNumbers(M, primes);
     //cout<<"Da332s"<<endl;
     // 팩토리얼 소인수 분해
-    sethowmuch(a+b, myMap, primes);
+    sethowmuch(a + b, myMap, primes);
     //cout<<"Das"<<endl;
     sethowmuch(a, aMap, primes);
     sethowmuch(b, bMap, primes);
