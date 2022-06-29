@@ -7,24 +7,40 @@
 using namespace std;
 
 int main() {
-    int sum[9];
+    string str;
 
-    for (int &i: sum) {
-        cin >> i;
-    }
-    int big = sum[0], small = sum[0];
+    cin >> str;
+    map<char, int> map;
 
-    for (int i: sum) {
-        if (i <= small) {
-            small = i;
-        }
-        if (i >= big) {
-            big = i;
-        }
+    for (char &c: str) {
+        c = toupper(c);
     }
 
-    cout << big << endl << small;
+    for (char &c: str) {
+        map[c]++;
+    }
 
+    int big = 0;
+    char bigText;
+    for (pair<char, int> pa: map) {
+        if (big < pa.second) {
+            big = pa.second;
+            bigText=pa.first;
+        }
+    }
+
+    int check=0;
+    for (pair<char, int> pa: map) {
+        if (big == pa.second) {
+           check++;
+        }
+        if(check==2){
+            cout<<"?";
+            return 0;
+        }
+    }
+
+    cout<<bigText;
 
     return 0;
 }
