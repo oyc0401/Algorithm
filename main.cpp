@@ -7,32 +7,27 @@
 using namespace std;
 
 int main() {
-    string str;
+    int num;
+    cin >> num;
+    vector<int> scores;
 
-    getline(cin,str);
-    map<char, int> map;
-
-    int sum=0;
-    if(str[0]==' '){
-        sum--;
-    }
-    if(str[str.length()-1]==' '){
-        sum--;
-    }
-
-
-    for (char c: str) {
-        if(c==' '){
-            sum++;
+    double big = 0;
+    for (int i = 1; i <= num; i++) {
+        int score;
+        cin >> score;
+        scores.push_back(score);
+        if (big < score) {
+            big = score;
         }
     }
-    cout<<sum+1;
+
+    double sum = 0;
+    for (int sc: scores) {
+        sum += (sc/big)*100;
+    }
 
 
-
-
-
-
+    cout << fixed<< setprecision(10) << sum/num;
     return 0;
 }
 
