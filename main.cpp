@@ -9,25 +9,16 @@ using namespace std;
 int main() {
     int num;
     cin >> num;
-    vector<int> scores;
 
-    double big = 0;
-    for (int i = 1; i <= num; i++) {
-        int score;
-        cin >> score;
-        scores.push_back(score);
-        if (big < score) {
-            big = score;
+    for(int i=1;i<=num;i++){
+        for(int k=1;k<=i;k++){
+            cout<<"*";
         }
-    }
-
-    double sum = 0;
-    for (int sc: scores) {
-        sum += (sc/big)*100;
+        cout<<endl;
     }
 
 
-    cout << fixed<< setprecision(10) << sum/num;
+
     return 0;
 }
 
