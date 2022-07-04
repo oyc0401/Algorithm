@@ -1,13 +1,16 @@
 #include <iostream>
 #include <vector>
+#include <iomanip>
 
 
 using namespace std;
 
+vector<int> ropes;
+
 // 몇개로 나뉘는지 함수
-long long int hownuch(vector<long long int> &ropes, long long int size) {
-    long long int sum = 0;
-    for (long long int rope: ropes) {
+int hownuch(vector<int> &ropes, int size) {
+    int sum = 0;
+    for (int rope: ropes) {
         sum += rope / size;
     }
     //cout << size << "cm" << ": " << sum << "개" << endl;
@@ -26,62 +29,74 @@ long long int hownuch(vector<long long int> &ropes, long long int size) {
 // 457
 // 539
 
-long long int hownuchNaMuZi(vector<long long int> &ropes, long long int size) {
-    long long int max = 0;
-    long long int min = 10000000;
+int hownuchNaMuZi(vector<int> &ropes, int size) {
+    int small = 10000000;
 
     for (int rope: ropes) {
-        long long int namuzi = rope % size;
-        if (min > namuzi) {
-            min = namuzi;
-            max = rope / size;
+        int namuzi = rope % size;
+
+        int count = rope / size;
+        if (count > 0) {
+
+            int dsa = namuzi / count;
+            if (small > dsa) {
+                small = dsa;
+            }
         }
-        //cout << rope << ": "<<size<<" * "<<rope / size << " + " << namuzi << endl;
+
+        // cout << setw(6) << rope << ": " << size << " * " << rope / size << " + " << namuzi << endl;
     }
 
+    // cout << min << ", " << max << endl;
 
-    return min / max;
+    return small;
 
+}
+
+int getsize(long long int sum, int N) {
+    int current = sum / N;
+    int num = hownuch(ropes, current);
+    //cout << current << ", " << num << endl;
+
+    while (num != N) {
+        //cout << num << endl;
+        int divide = current * num / N;
+        if (divide == current) {
+            //cout << "나눌 수 없음" << endl;
+            break;
+        }
+
+        current = divide;
+        //cout << "cm 조정 " << current << ", " << N << ", " << num << endl;
+
+        num = hownuch(ropes, current);
+        //cout << current << ", " << num << endl;
+    }
+
+    return current;
 }
 
 
 int main() {
 
-    long long int K, N;
+    int K, N;
     cin >> K >> N;
-    vector<long long int> ropes;
+
 
     long long int sum = 0;
     // 배열에 넣기
-    for (long long int i = 0; i < K; i++) {
-        long long int a;
+    for (int i = 0; i < K; i++) {
+        int a;
         cin >> a;
         ropes.push_back(a);
         sum += a;
     }
     // 구하기
 
-    long long int current = sum / N;
-    long long int num = hownuch(ropes, current);
-    //cout << current << ", " << num << endl;
 
-    while (num != N) {
-        //cout << num << endl;
+    int current = getsize(sum, N);
 
-        //cout << "cm 조정 " << current << ", " << N << ", " << num << endl;
-
-        long long int divide = current * num / N;
-        if (divide == current) {
-            //cout << "나눌 수 없음" << endl;
-            break;
-        }
-        current = divide;
-
-        num = hownuch(ropes, current);
-        //cout << current << ", " << num << endl;
-    }
-
-    long long int plus = hownuchNaMuZi(ropes, current);
+    int plus = hownuchNaMuZi(ropes, current);
     //cout << plus << endl;
 
     cout << current + plus;
