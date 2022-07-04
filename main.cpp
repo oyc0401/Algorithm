@@ -1,19 +1,16 @@
-
 #include <iostream>
 #include <vector>
 
 
 using namespace std;
 
-vector<int> ropes;
-
 // 몇개로 나뉘는지 함수
-int hownuch (int size) {
-    int sum = 0;
-    for (int rope: ropes) {
+long long int hownuch(vector<long long int> &ropes, long long int size) {
+    long long int sum = 0;
+    for (long long int rope: ropes) {
         sum += rope / size;
     }
-    // cout << size << "cm" << ": " << sum << "개" << endl;
+    //cout << size << "cm" << ": " << sum << "개" << endl;
     return sum;
 }
 
@@ -29,17 +26,17 @@ int hownuch (int size) {
 // 457
 // 539
 
-int hownuchNaMuZi(int size) {
-    int max = 0;
-    int min = 10000000;
+long long int hownuchNaMuZi(vector<long long int> &ropes, long long int size) {
+    long long int max = 0;
+    long long int min = 10000000;
 
     for (int rope: ropes) {
-        int namuzi = rope % size;
+        long long int namuzi = rope % size;
         if (min > namuzi) {
             min = namuzi;
             max = rope / size;
         }
-       // cout << rope << ": " << size << " * " << rope / size << " + " << namuzi << endl;
+        //cout << rope << ": "<<size<<" * "<<rope / size << " + " << namuzi << endl;
     }
 
 
@@ -50,50 +47,44 @@ int hownuchNaMuZi(int size) {
 
 int main() {
 
-
-    int K, N;
+    long long int K, N;
     cin >> K >> N;
+    vector<long long int> ropes;
 
-
-    int big = 0;
-    int min = 1;
-
+    long long int sum = 0;
     // 배열에 넣기
-    for (int i = 0; i < K; i++) {
-        int a;
+    for (long long int i = 0; i < K; i++) {
+        long long int a;
         cin >> a;
         ropes.push_back(a);
-        if (big < a) {
-            big = a;
-        }
+        sum += a;
     }
-
     // 구하기
-    long long int middle = (big + min) / 2;
 
-    int num = hownuch( middle);
+    long long int current = sum / N;
+    long long int num = hownuch(ropes, current);
+    //cout << current << ", " << num << endl;
 
     while (num != N) {
+        //cout << num << endl;
 
-        if (num < N) {
-            big = middle;
-        } else if (num > N) {
-            min = middle;
-        } else {
-        }
+        //cout << "cm 조정 " << current << ", " << N << ", " << num << endl;
 
-        if (middle == (big + min) / 2) {
+        long long int divide = current * num / N;
+        if (divide == current) {
+            //cout << "나눌 수 없음" << endl;
             break;
         }
-        middle = (big + min) / 2;
-        //cout << min << ", " << middle << ", " << big << endl;
-        num = hownuch( middle);
+        current = divide;
+
+        num = hownuch(ropes, current);
         //cout << current << ", " << num << endl;
     }
 
-    int plus = hownuchNaMuZi(middle);
+    long long int plus = hownuchNaMuZi(ropes, current);
+    //cout << plus << endl;
 
-    cout << middle + plus;
+    cout << current + plus;
 
 
     return 0;
