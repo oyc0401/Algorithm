@@ -8,7 +8,7 @@ using namespace std;
 vector<int> ropes;
 
 // 몇개로 나뉘는지 함수
-int hownuch(vector<int> &ropes, int size) {
+int hownuch(int size) {
     int sum = 0;
     for (int rope: ropes) {
         sum += rope / size;
@@ -29,7 +29,19 @@ int hownuch(vector<int> &ropes, int size) {
 // 457
 // 539
 
-int hownuchNaMuZi(vector<int> &ropes, int size) {
+
+int getAnswer(int size,int N) {
+    int po=N;
+    while (po==N){
+        size++;
+      N= hownuch(size);
+      // cout<<N<<endl;
+    }
+
+    return size-1;
+}
+
+int hownuchNaMuZi(int size) {
     int small = 10000000;
 
     for (int rope: ropes) {
@@ -55,7 +67,7 @@ int hownuchNaMuZi(vector<int> &ropes, int size) {
 
 int getsize(long long int sum, int N) {
     int current = sum / N;
-    int num = hownuch(ropes, current);
+    int num = hownuch(current);
     //cout << current << ", " << num << endl;
 
     while (num != N) {
@@ -69,7 +81,7 @@ int getsize(long long int sum, int N) {
         current = divide;
         //cout << "cm 조정 " << current << ", " << N << ", " << num << endl;
 
-        num = hownuch(ropes, current);
+        num = hownuch(current);
         //cout << current << ", " << num << endl;
     }
 
@@ -93,13 +105,16 @@ int main() {
     }
     // 구하기
 
-
     int current = getsize(sum, N);
 
-    int plus = hownuchNaMuZi(ropes, current);
-    //cout << plus << endl;
+    int plus = hownuchNaMuZi(current);
+//    cout << plus << endl;
+//
+//cout << current + plus;
+    int an=getAnswer(current,N);
+    cout<<an;
 
-    cout << current + plus;
+
 
 
     return 0;
