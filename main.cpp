@@ -1,121 +1,63 @@
+
 #include <iostream>
 #include <vector>
-#include <iomanip>
+#include <algorithm>
 
 
 using namespace std;
 
-vector<int> ropes;
 
-// 몇개로 나뉘는지 함수
-int hownuch(int size) {
-    int sum = 0;
-    for (int rope: ropes) {
-        sum += rope / size;
-    }
-    //cout << size << "cm" << ": " << sum << "개" << endl;
-    return sum;
-}
+void setPrimeNumbers(int n, vector<int> &primes) {
+    bool *isPrime = new bool[n + 1];// n까지 구해야하므로, n+1개를 동적할당
 
-//4 300
-//802
-//743
-//457
-//539
-
-// 4 13
-// 802
-// 743
-// 457
-// 539
-
-
-int getAnswer(int size,int N) {
-    int po=N;
-    while (po==N){
-        size++;
-      N= hownuch(size);
-      // cout<<N<<endl;
+    //먼저 모든 배열을 true로 초기화
+    for (int i = 0; i <= n; i++) {
+        isPrime[i] = true;
     }
 
-    return size-1;
-}
-
-int hownuchNaMuZi(int size) {
-    int small = 10000000;
-
-    for (int rope: ropes) {
-        int namuzi = rope % size;
-
-        int count = rope / size;
-        if (count > 0) {
-
-            int dsa = namuzi / count;
-            if (small > dsa) {
-                small = dsa;
+    for (int i = 2; i <= n; i++) {
+        if (isPrime[i]) {
+            primes.push_back(i);//해당수가 소수라면, 출력하고 해당수를 제외한 배수들을 모두 제외
+            // cout << i << " ";
+            for (int j = i * 2; j <= n; j += i) {
+                isPrime[j] = false;
             }
         }
-
-        // cout << setw(6) << rope << ": " << size << " * " << rope / size << " + " << namuzi << endl;
     }
-
-    // cout << min << ", " << max << endl;
-
-    return small;
-
 }
-
-int getsize(long long int sum, int N) {
-    int current = sum / N;
-    int num = hownuch(current);
-    //cout << current << ", " << num << endl;
-
-    while (num != N) {
-        //cout << num << endl;
-        int divide = current * num / N;
-        if (divide == current) {
-            //cout << "나눌 수 없음" << endl;
-            break;
-        }
-
-        current = divide;
-        //cout << "cm 조정 " << current << ", " << N << ", " << num << endl;
-
-        num = hownuch(current);
-        //cout << current << ", " << num << endl;
-    }
-
-    return current;
-}
-
 
 int main() {
 
-    int K, N;
-    cin >> K >> N;
+    int a;
+    cin >> a;
+    vector<int> vec;
+    int max = 0;
 
-
-    long long int sum = 0;
-    // 배열에 넣기
-    for (int i = 0; i < K; i++) {
-        int a;
-        cin >> a;
-        ropes.push_back(a);
-        sum += a;
+    for (int i = 0; i < a; ++i) {
+        int ip;
+        cin >> ip;
+        vec.push_back(ip);
+        if (max < ip) {
+            max = ip;
+        }
     }
-    // 구하기
 
-    int current = getsize(sum, N);
+    vector<int> primes;
+    setPrimeNumbers(max, primes);
 
-    int plus = hownuchNaMuZi(current);
-//    cout << plus << endl;
-//
-//cout << current + plus;
-    int an=getAnswer(current,N);
-    cout<<an;
+    int sum = 0;
+    for (int num: vec) {
 
+        if (find(primes.begin(), primes.end(), num) == primes.end()) {
+            //cout << num << "은 찾을 수 없습니다.\n";
+        } else {
+            //cout << num << "는 존재하며 인덱스는 " << it - primes.begin() << " 입니다.\n";
+            sum++;
+        }
 
+    }
 
+    cout << sum;
 
     return 0;
 }
