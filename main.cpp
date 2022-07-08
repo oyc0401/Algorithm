@@ -11,36 +11,39 @@ using namespace std;
 
 int main() {
 
-    stack<int> sta;
+
     int a;
     cin >> a;
+
+
     for (int i = 0; i < a; ++i) {
-        string message;
+        int left = 0;
+        bool yes = true;
 
-        cin >> message;
-
-        if (message == "push") {
-            int number;
-            cin >> number;
-            sta.push(number);
-        } else if (message == "pop") {
-            if(sta.empty()){
-                cout<<"-1"<<"\n";
-            }else{
-                cout << sta.top() << "\n";
-                sta.pop();
+        string galho;
+        cin >> galho;
+        //cout << galho.size();
+        for (int k = 0; k < galho.size(); ++k) {
+            //cout<<galho[k]<<endl;
+            if (galho[k] == '(') {
+                left++;
+            } else if (galho[k] == ')') {
+                if (left > 0) {
+                    left--;
+                } else {
+                    yes = false;
+                    break;
+                }
             }
 
-        } else if (message == "size") {
-            cout << sta.size() << "\n";
-        } else if (message == "empty") {
-            cout << sta.empty() << "\n";
-        } else if (message == "top") {
-            if(sta.empty()){
-                cout<<"-1"<<"\n";
-            }else{
-                cout << sta.top() << "\n";
-            }
+        }
+        if(left>0){
+            yes= false;
+        }
+        if (yes) {
+            cout << "YES"<<endl;
+        } else {
+            cout << "NO" << endl;
         }
 
     }
