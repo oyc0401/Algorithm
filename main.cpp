@@ -8,112 +8,44 @@
 
 using namespace std;
 
-bool ff[50][50];
-
-int getHow(int a, int b) {
-    int white = 0;
-    int black = 0;
-
-    for (int i = 0; i < 8; ++i) {
-        for (int k = 0; k < 8; ++k) {
-           // cout << i + a << k + b;
-            int A=i+a;
-            int B=k+b;
-
-            if (i % 2 == 0) {
-                // 첫칸이 흰색
-                if (k % 2 == 0) {
-                    // 흰색칸
-                    if(ff[A][B]){
-                        white++;
-                    }else{
-                        black++;
-                    }
-                } else {
-                    // 검정색칸
-                    if(ff[A][B]){
-                        black++;
-                    }else{
-                        white++;
-                    }
-                }
-            } else {
-                if (k % 2 == 0) {
-                    // 검정색칸
-                    if(ff[A][B]){
-                        black++;
-                    }else{
-                        white++;
-                    }
-                } else {
-                    // 흰색칸
-                    if(ff[A][B]){
-                        white++;
-                    }else{
-                        black++;
-                    }
-                }
-            }
-        }
-        //cout << endl;
-    }
-
-   // cout<<"흰"<<white<<endl;
-    //cout<<"검"<<black<<endl;
-
-    if(white>black){
-        return black;
-    }else{
-        return white;
-    }
-}
-
+vector<string> vec[51];
 
 int main() {
+    int num;
+    cin >> num;
 
-    queue<int> que;
-    int a, b;
-    cin >> a >> b;
+    for (int i = 0; i < num; ++i) {
+        string text;
+        cin >> text;
+
+        int len = text.size();
+        if (find(vec[len].begin(), vec[len].end(), text) == vec[len].end()) {
+            vec[len].push_back(text);
+        }
 
 
-    for (int i = 0; i < a; ++i) {
-        string line;
-        cin >> line;
-        for (int k = 0; k < b; ++k) {
-            if (line[k] == 'W') {
-                ff[i][k] = true;
-            } else if (line[k] == 'B') {
-                ff[i][k] = false;
+    }
+
+    for (vector<string> vector: vec) {
+        if (vector.size() > 0) {
+            sort(vector.begin(), vector.end());
+            for (string text: vector) {
+                cout << text<<endl;
+                //cout << text << ", ";
             }
+           // cout << endl;
         }
     }
 
 
-   //int how = getHow(0, 0);
-    //cout << how;
-    int min=64;
-
-    for (int i = 0; i <= a-8; ++i) {
-        for (int k = 0; k <= b-8; ++k) {
-            //cout<<i<<k<<endl;
-            int how = getHow(i, k);
-            if(min>how){
-                min=how;
-            }
-
-        }
-    }
-    cout<<min;
 
 
-//    for (int i = 0; i < a; ++i) {
-//        for (int k = 0; k < b; ++k) {
-//            cout<< ff[i][k];
-//        }
-//        cout<<endl;
+//
+//    if ('i' < 'b') {
+//        cout << "참";
+//    } else {
+//        cout << "거짓";
 //    }
-
-
 
 
     return 0;
