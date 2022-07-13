@@ -8,46 +8,33 @@
 
 using namespace std;
 
-vector<string> vec[51];
+bool isFan(string text){
+    int size=text.size();
+    int half=size/2;
+
+    for (int i = 0; i < half; ++i) {
+        if(text[i]!=text[size-1-i]){
+            return false;
+        }
+
+    }
+    return true;
+}
 
 int main() {
-    int num;
-    cin >> num;
+    string text;
+    cin >> text;
 
-    for (int i = 0; i < num; ++i) {
-        string text;
+
+    while (text!="0"){
+       if(isFan(text)){
+           cout<<"yes"<<endl;
+       }else{
+           cout<<"no"<<endl;
+       }
         cin >> text;
-
-        int len = text.size();
-        if (find(vec[len].begin(), vec[len].end(), text) == vec[len].end()) {
-            vec[len].push_back(text);
-        }
-
-
     }
-
-    for (vector<string> vector: vec) {
-        if (vector.size() > 0) {
-            sort(vector.begin(), vector.end());
-            for (string text: vector) {
-                cout << text<<endl;
-                //cout << text << ", ";
-            }
-           // cout << endl;
-        }
-    }
-
-
-
-
-//
-//    if ('i' < 'b') {
-//        cout << "참";
-//    } else {
-//        cout << "거짓";
-//    }
-
-
+    
     return 0;
 }
 
