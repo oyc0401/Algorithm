@@ -8,33 +8,24 @@
 
 using namespace std;
 
-bool isFan(string text){
-    int size=text.size();
-    int half=size/2;
-
-    for (int i = 0; i < half; ++i) {
-        if(text[i]!=text[size-1-i]){
-            return false;
-        }
-
-    }
-    return true;
-}
 
 int main() {
-    string text;
-    cin >> text;
 
+    queue<int> que;
+    int a;
+    cin >> a;
 
-    while (text!="0"){
-       if(isFan(text)){
-           cout<<"yes"<<endl;
-       }else{
-           cout<<"no"<<endl;
-       }
-        cin >> text;
+    for (int i = 1; i <= a; ++i) {
+        que.push(i);
     }
-    
+
+    for (int i = 1; i < a; ++i) {
+        que.pop();
+        int num=que.front();
+        que.pop();
+        que.push(num);
+    }
+
+    cout<<que.front();
     return 0;
 }
-
