@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <set>
 #include <queue>
+#include <cmath>
 
 
 using namespace std;
@@ -11,21 +12,24 @@ using namespace std;
 
 int main() {
 
-    queue<int> que;
     int a;
-    cin >> a;
+    vector<int> vec;
 
-    for (int i = 1; i <= a; ++i) {
-        que.push(i);
+    cin>>a;
+
+    for (int i = 0; i < a; ++i) {
+        int number;
+        cin >> number;
+        vec.push_back(number);
     }
 
-    for (int i = 1; i < a; ++i) {
-        que.pop();
-        int num=que.front();
-        que.pop();
-        que.push(num);
+
+   std::sort(vec.begin(), vec.end());
+
+    for (int num:vec) {
+        cout << num << "\n";
     }
 
-    cout<<que.front();
+
     return 0;
 }
