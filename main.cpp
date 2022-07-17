@@ -10,34 +10,29 @@
 
 using namespace std;
 
+int factorial(int num) {
+    int sum = 1;
+    for (int i = 1; i <= num; ++i) {
+        sum *= i;
+    }
+    return sum;
+}
+
 // 1초: 1억번
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+//    ios_base::sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
 
 
 
 
-    int index;
-    map<int, vector<int>> myMap;
+    int N, K;
+    cin >> N >> K;
 
-    cin >> index;
+    int val = factorial(N) / factorial(K);
+    val/= factorial(N-K);
 
-    for (int i = 0; i < index; ++i) {
-        int x;
-        int y;
-        cin >> x >> y;
-        myMap[x].push_back(y);
-    }
-
-    for (pair<int, vector<int>> pa: myMap) {
-        std::sort(pa.second.begin(), pa.second.end());
-        for (int y: pa.second) {
-            cout << pa.first <<" "<< y << "\n";
-        }
-    }
-
-
+    cout << val;
     return 0;
 }
