@@ -12,40 +12,43 @@ using namespace std;
 
 // 1초: 1억번
 int main() {
-//    ios_base::sync_with_stdio(false);
-//    cin.tie(NULL);
-//    cout.tie(NULL);
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
 
-    int index, number;
-    cin >> index >> number;
+    int a, b, c;
 
-    vector<int> vec;
-    int max = 0;
+    cin >> a >> b >> c;
+    while (a != 0 && b != 0 && c != 0) {
+        int big;
+        int first;
+        int second;
 
-
-    for (int i = 0; i < index; ++i) {
-        int a;
-        cin >> a;
-        vec.push_back(a);
-    }
-
-    for (int i = 0; i < vec.size(); ++i) {
-        int first = vec[i];
-        for (int j = i+1; j < vec.size(); ++j) {
-            int second = vec[j];
-            for (int k = j+1; k < vec.size(); ++k) {
-                int third = vec[k];
-                int sum = first + second + third;
-                if (sum <= number) {
-                    //cout << first << ", " << second << ", " << third<<endl;
-                    max = sum > max ? sum : max;
-                }
-            }
+        if(a<b){
+            big=b;
+            first=a;
+        }else{
+            big=a;
+            first=b;
         }
-    }
 
-    cout << max;
+        if(big<c){
+            int t=big;
+            big=c;
+            second=t;
+        }else{
+            second=c;
+        }
+
+
+        if(big*big==first*first+second*second){
+            cout<<"right\n";
+        }else{
+            cout<<"wrong\n";
+        }
+        cin >> a >> b >> c;
+    }
 
     return 0;
 }
