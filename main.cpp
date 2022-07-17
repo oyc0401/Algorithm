@@ -12,43 +12,31 @@ using namespace std;
 
 // 1초: 1억번
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+//    ios_base::sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
 
 
-    int a, b, c;
-
-    cin >> a >> b >> c;
-    while (a != 0 && b != 0 && c != 0) {
-        int big;
-        int first;
-        int second;
-
-        if(a<b){
-            big=b;
-            first=a;
-        }else{
-            big=a;
-            first=b;
-        }
-
-        if(big<c){
-            int t=big;
-            big=c;
-            second=t;
-        }else{
-            second=c;
-        }
 
 
-        if(big*big==first*first+second*second){
-            cout<<"right\n";
-        }else{
-            cout<<"wrong\n";
-        }
-        cin >> a >> b >> c;
+    int index;
+    map<int, vector<string>> myMap;
+
+    cin >> index;
+
+    for (int i = 0; i < index; ++i) {
+        int age;
+        string name;
+        cin >> age >> name;
+        myMap[age].push_back(name);
     }
+
+    for (pair<int, vector<string>> pa: myMap) {
+        for (string name: pa.second) {
+            cout << pa.first <<" "<< name << "\n";
+        }
+    }
+
 
     return 0;
 }
