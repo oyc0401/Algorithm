@@ -10,30 +10,59 @@
 
 using namespace std;
 
-// 1초: 1억번
+int len, num;
+vector<bool> vec;
+
+int nextNumber(int where) {
+    for (int j = 0; j < num; ++j) {
+        int next = where + 1;
+        next %= len;
+        if (vec[next]) {
+//               cout<<"O";
+            where++;
+            where = where % len;
+        } else {
+            where++;
+            where %= len;
+
+            while (!vec[where]) {
+//                   cout<<"X";
+//                 cout<<where;
+                where++;
+                where = where % len;
+            }
+        }
+    }
+    return where;
+}
+
+/// 1초: 1억번
 int main() {
-//    ios_base::sync_with_stdio(false);
-//    cin.tie(NULL);
-//    cout.tie(NULL);
+///    ios_base::sync_with_stdio(false);
+///    cin.tie(NULL);
+///    cout.tie(NULL);
 
+    vector<int> numbers;
+    cin >> len >> num;
 
-
-
-    int index;
-    map<int, vector<string>> myMap;
-
-    cin >> index;
-
-    for (int i = 0; i < index; ++i) {
-        int age;
-        string name;
-        cin >> age >> name;
-        myMap[age].push_back(name);
+    for (int i = 0; i < len; ++i) {
+        vec.push_back(true);
+    }
+    int where = -1;
+    for (int i = 0; i < len; ++i) {
+        where = nextNumber(where);
+        vec[where] = false;
+        numbers.push_back(where + 1);
     }
 
-    for (pair<int, vector<string>> pa: myMap) {
-        for (string name: pa.second) {
-            cout << pa.first <<" "<< name << "\n";
+
+    cout << "<";
+    for (int i = 0; i < numbers.size(); ++i) {
+        cout << numbers[i];
+        if (i == numbers.size() - 1) {
+            cout << ">";
+        } else {
+            cout << ", ";
         }
     }
 
