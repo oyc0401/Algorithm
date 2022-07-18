@@ -3,36 +3,69 @@
 
 #include <algorithm>
 #include <set>
-#include <queue>
-#include <cmath>
-#include <map>
+#include <deque>
 
 
 using namespace std;
 
-int factorial(int num) {
-    int sum = 1;
-    for (int i = 1; i <= num; ++i) {
-        sum *= i;
-    }
-    return sum;
-}
 
-// 1초: 1억번
 int main() {
-//    ios_base::sync_with_stdio(false);
-//    cin.tie(NULL);
-//    cout.tie(NULL);
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
 
+    deque<int> deq;
+    int a;
+    cin >> a;
+    for (int i = 0; i < a; ++i) {
+        string message;
+
+        cin >> message;
+
+        if (message == "push_front") {
+            int number;
+            cin >> number;
+            deq.push_front(number);
+        } else if (message == "push_back") {
+            int number;
+            cin >> number;
+            deq.push_back(number);
+        } else if (message == "pop_front") {
+            if (deq.empty()) {
+                cout << "-1" << "\n";
+            } else {
+                cout << deq.front() << "\n";
+                deq.pop_front();
+            }
+        } else if (message == "pop_back") {
+            if (deq.empty()) {
+                cout << "-1" << "\n";
+            } else {
+                cout << deq.back() << "\n";
+                deq.pop_back();
+            }
+        } else if (message == "size") {
+            cout << deq.size() << "\n";
+        } else if (message == "empty") {
+            cout << deq.empty() << "\n";
+        } else if (message == "front") {
+            if (deq.empty()) {
+                cout << "-1" << "\n";
+            } else {
+                cout << deq.front() << "\n";
+            }
+        } else if (message == "back") {
+            if (deq.empty()) {
+                cout << "-1" << "\n";
+            } else {
+                cout << deq.back() << "\n";
+            }
+        }
+
+    }
 
 
-    int N, K;
-    cin >> N >> K;
-
-    int val = factorial(N) / factorial(K);
-    val/= factorial(N-K);
-
-    cout << val;
     return 0;
 }
+
