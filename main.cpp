@@ -3,69 +3,38 @@
 
 #include <algorithm>
 #include <set>
-#include <deque>
+#include <queue>
+#include <cmath>
+#include <map>
 
 
 using namespace std;
 
-
+// 1초: 1억번
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 
+    int index;
+    map<int, int> myMap;
 
-    deque<int> deq;
-    int a;
-    cin >> a;
-    for (int i = 0; i < a; ++i) {
-        string message;
+    cin >> index;
 
-        cin >> message;
+    for (int i = 0; i < index; ++i) {
+        int num;
+        cin >> num;
+        myMap[num]++;
+    }
 
-        if (message == "push_front") {
-            int number;
-            cin >> number;
-            deq.push_front(number);
-        } else if (message == "push_back") {
-            int number;
-            cin >> number;
-            deq.push_back(number);
-        } else if (message == "pop_front") {
-            if (deq.empty()) {
-                cout << "-1" << "\n";
-            } else {
-                cout << deq.front() << "\n";
-                deq.pop_front();
-            }
-        } else if (message == "pop_back") {
-            if (deq.empty()) {
-                cout << "-1" << "\n";
-            } else {
-                cout << deq.back() << "\n";
-                deq.pop_back();
-            }
-        } else if (message == "size") {
-            cout << deq.size() << "\n";
-        } else if (message == "empty") {
-            cout << deq.empty() << "\n";
-        } else if (message == "front") {
-            if (deq.empty()) {
-                cout << "-1" << "\n";
-            } else {
-                cout << deq.front() << "\n";
-            }
-        } else if (message == "back") {
-            if (deq.empty()) {
-                cout << "-1" << "\n";
-            } else {
-                cout << deq.back() << "\n";
-            }
-        }
-
+    int how;
+cin>>how;
+    for (int i = 0; i < how; ++i) {
+        int a;
+        cin>>a;
+      cout<<  myMap[a]<<" ";
     }
 
 
     return 0;
 }
-
