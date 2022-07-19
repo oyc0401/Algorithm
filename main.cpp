@@ -6,9 +6,7 @@
 #include <queue>
 #include <cmath>
 #include <map>
-//
-// 1
-// 1 6 12 11
+
 
 using namespace std;
 
@@ -18,27 +16,25 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int index, ans;
-    map<string, int> myMap;
-    string list[100001];
 
-    cin >> index >> ans;
 
-    for (int i = 1; i <= index; ++i) {
-        string name;
-        cin >> name;
-        myMap[name] = i;
-        list[i] = name;
+
+    int index;
+    map<int, vector<int>> myMap;
+
+    cin >> index;
+
+    for (int i = 0; i < index; ++i) {
+        int x;
+        int y;
+        cin >> x >> y;
+        myMap[y].push_back(x);
     }
 
-    for (int i = 0; i < ans; ++i) {
-        string name;
-        cin >> name;
-        if(name[0]>='0' &&name[0]<='9'){
-            int in= stoi(name);
-            cout<<list[in]<<"\n";
-        }else{
-            cout<<myMap[name]<<"\n";
+    for (pair<int, vector<int>> pa: myMap) {
+        std::sort(pa.second.begin(), pa.second.end());
+        for (int x: pa.second) {
+            cout <<x<<" "<< pa.first << "\n";
         }
     }
 
