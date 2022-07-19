@@ -11,7 +11,7 @@
 using namespace std;
 
 int x, y;
-bool isFind= false;
+bool isFind = false;
 vector<pair<int, int>> vec;
 
 void printMap(int **&farm) {
@@ -36,7 +36,7 @@ void setCheck(int **map, int xp, int yp) {
 
         if (yp == y - 1 && xp == x - 1) {
             //cout << "찾음!" << endl;
-            isFind= true;
+            isFind = true;
             return;
         }
 
@@ -71,9 +71,7 @@ void setCheck(int **map, int xp, int yp) {
             pa.second = yp + 1;
             vec.push_back(pa);
         }
-
     }
-
 }
 
 
@@ -107,12 +105,12 @@ int main() {
     pa.second = 0;
     vec.push_back(pa);
 
-    while (isFind== false) {
+    while (isFind == false) {
         number++;
-        vector<pair<int,int>>tempV;
+        vector<pair<int, int>> tempV;
 
         for (pair<int, int> pai: vec) {
-           tempV.push_back(pai);
+            tempV.push_back(pai);
         }
 
         vec.clear();
@@ -120,8 +118,10 @@ int main() {
         for (pair<int, int> pai: tempV) {
             setCheck(farm, pai.first, pai.second);
         }
+        cout << number << endl;
+        printMap(farm);
     }
-    cout<<number;
+    cout << number;
 
 
     return 0;
