@@ -10,27 +10,39 @@
 
 using namespace std;
 
-int myMap[1000001];
+int row, col, recSize=0;
+int number = 0;
 
-int getNum(int num) {
-    myMap[1] = 0;
-    for (int i = 2; i <= num; ++i) {
+void cut() {
+    // 넓이 1/4 감소
+    recSize /= 2;
+    int where;
 
-        myMap[i] = myMap[i - 1] + 1;
-
-        // 2로 나눠지면 잘 되는지 확인
-        if (i % 2 == 0) {
-            myMap[i] = min(myMap[i], myMap[i / 2] + 1);
+    if (col < recSize) {
+        //cout << "왼쪽\n";
+        if (row < recSize) {
+           // cout << "위쪽\n";
+            where = 0;
+        } else {
+            // cout << "아래쪽\n";
+            where = 2;
+            row -= recSize;
         }
-
-        // 3으로 나누는게 최고가 아니였어!
-        if (i % 3 == 0) {
-            myMap[i] = min(myMap[i], myMap[i / 3] + 1);
+    } else {
+        // cout << "오른쪽\n";
+        if (row < recSize) {
+           // cout << "위쪽\n";
+            where = 1;
+        } else {
+            // cout << "아래쪽\n";
+            where = 3;
+            row -= recSize;
         }
+        col -= recSize;
     }
-    return myMap[num];
-}
 
+    number += recSize * recSize * where;
+}
 
 // 1초: 1억번
 int main() {
@@ -38,9 +50,23 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int number;
-    cin >> number;
-    cout << getNum(number);
+    int N;
+    cin >> N;
+    for (int i = 0; i < N; ++i) {
+        
+    }
+    recSize = pow(2, N);
+
+    cin >> row >> col;
+
+    while (recSize != 1) {
+        cut();
+        // cout << row << ", " << col << ", " << recSize <<", " << number<<endl;
+    }
+
+    cout << number;
 
     return 0;
 }
+
+
