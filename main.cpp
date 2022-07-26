@@ -9,43 +9,57 @@
 
 
 using namespace std;
+//14
+//1 4
+//2 4
+//4 4
+//3 5
+//0 6
+//5 7
+//7 8
+//3 8
+//5 9
+//6 10     //10
+//8 11
+//8 12
+//2 13
+//12 14
+
 
 // 1초: 1억번
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int a, b;
-    cin >> a >> b;
 
-    map<string, int> myMap;
+    int ind;
+    cin >> ind;
+    map<int, priority_queue<int, vector<int>, greater<int>>> myMap;
 
-    for (int i = 0; i < a; ++i) {
-        string name;
-        cin >> name;
-        myMap[name]++;
+    for (int i = 0; i < ind; ++i) {
+        int a, b;
+        cin >> a >> b;
+        myMap[b].push(a);
     }
 
-    for (int i = 0; i < b; ++i) {
-        string name;
-        cin >> name;
-        myMap[name]++;
-    }
+    int where = 0;
+    int sum = 0;
 
-    int count = 0;
-    vector<string> names;
+    for (pair<int, priority_queue<int, vector<int>, greater<int>>> pa: myMap) {
+        int i = pa.first;
+        priority_queue<int, vector<int>, greater<int>> qu = pa.second;
+        while (!qu.empty()) {
 
-    for (pair<string, int> pa: myMap) {
-        if (pa.second == 2) {
-            count++;
-            names.push_back(pa.first);
+            if (qu.top() >= where) {
+                where = i;
+                //cout<<i<< " "<< qu.top()<<endl;
+                sum++;
+            }
+            qu.pop();
         }
     }
 
-    cout<<count<<endl;
-    for (string name: names) {
-        cout << name << "\n";
-    }
+    cout << sum;
 
 
     return 0;
