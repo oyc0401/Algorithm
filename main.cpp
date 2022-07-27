@@ -9,21 +9,6 @@
 
 
 using namespace std;
-//14
-//1 4
-//2 4
-//4 4
-//3 5
-//0 6
-//5 7
-//7 8
-//3 8
-//5 9
-//6 10     //10
-//8 11
-//8 12
-//2 13
-//12 14
 
 
 // 1초: 1억번
@@ -32,36 +17,61 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int ind;
-    cin >> ind;
-    map<int, priority_queue<int, vector<int>, greater<int>>> myMap;
+    int com, ind;
+    cin >> com >> ind;
+
+    bool *arr = new bool[com];
+    vector<int> *list = new vector<int>[com];
 
     for (int i = 0; i < ind; ++i) {
         int a, b;
         cin >> a >> b;
-        myMap[b].push(a);
+        a--;
+        b--;
+        list[a].push_back(b);
+        list[b].push_back(a);
     }
 
-    int where = 0;
-    int sum = 0;
+//    for (int i = 0; i < com; ++i) {
+//        cout << i << ": ";
+//        for (int n: list[i]) {
+//            cout << n << " ";
+//        }
+//        cout << endl;
+//    }
 
-    for (pair<int, priority_queue<int, vector<int>, greater<int>>> pa: myMap) {
-        int i = pa.first;
-        priority_queue<int, vector<int>, greater<int>> qu = pa.second;
-        while (!qu.empty()) {
+    queue<int> current;
+    int sum=0;
 
-            if (qu.top() >= where) {
-                where = i;
-                //cout<<i<< " "<< qu.top()<<endl;
+    // 처음 감염은 1번 컴퓨터
+    arr[0] = true;
+    current.push(0);
+
+
+    while (!current.empty()) {
+        int front = current.front();
+        vector<int> vec = list[front];
+       ///cout << front << ": ";
+
+        for (int num: vec) {
+           /// cout << num << " ";
+            if (arr[num] == false) {
+                arr[num] = true;
                 sum++;
+                current.push(num);
             }
-            qu.pop();
         }
+        ///cout << endl;
+        current.pop();
     }
 
-    cout << sum;
-
-
+//    for (int i = 0; i < com; ++i) {
+//        cout << i << ": ";
+//        bool b = arr[i];
+//        cout << b << "\n ";
+//
+//    }
+cout<<sum;
     return 0;
 }
 
