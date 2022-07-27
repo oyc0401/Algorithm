@@ -17,61 +17,24 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int com, ind;
-    cin >> com >> ind;
-
-    bool *arr = new bool[com];
-    vector<int> *list = new vector<int>[com];
-
+    int ind;
+    cin >> ind;
+    priority_queue<int, vector<int>, greater<int>> que;
     for (int i = 0; i < ind; ++i) {
-        int a, b;
-        cin >> a >> b;
-        a--;
-        b--;
-        list[a].push_back(b);
-        list[b].push_back(a);
-    }
-
-//    for (int i = 0; i < com; ++i) {
-//        cout << i << ": ";
-//        for (int n: list[i]) {
-//            cout << n << " ";
-//        }
-//        cout << endl;
-//    }
-
-    int sum=0;
-
-    for (int i = 0; i < com; ++i) {
-        queue<int> current;
-        if(arr[i]== false){
-            sum++;
-
-            // 처음 감염은 i번 컴퓨터
-            arr[i] = true;
-            current.push(i);
-
-            while (!current.empty()) {
-                int front = current.front();
-                vector<int> vec = list[front];
-                ///cout << front << ": ";
-
-                for (int num: vec) {
-                    /// cout << num << " ";
-                    if (arr[num] == false) {
-                        arr[num] = true;
-                        current.push(num);
-                    }
-                }
-                ///cout << endl;
-                current.pop();
+        int num;
+        cin >> num;
+        if (num == 0) {
+            if (que.empty()) {
+                cout << 0 << '\n';
+            } else {
+                cout << que.top() << '\n';
+                que.pop();
             }
+        } else {
+            que.push(num);
         }
     }
 
-
-
-cout<<sum;
     return 0;
 }
 
