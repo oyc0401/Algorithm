@@ -40,37 +40,37 @@ int main() {
 //        cout << endl;
 //    }
 
-    queue<int> current;
     int sum=0;
 
-    // 처음 감염은 1번 컴퓨터
-    arr[0] = true;
-    current.push(0);
+    for (int i = 0; i < com; ++i) {
+        queue<int> current;
+        if(arr[i]== false){
+            sum++;
 
+            // 처음 감염은 i번 컴퓨터
+            arr[i] = true;
+            current.push(i);
 
-    while (!current.empty()) {
-        int front = current.front();
-        vector<int> vec = list[front];
-       ///cout << front << ": ";
+            while (!current.empty()) {
+                int front = current.front();
+                vector<int> vec = list[front];
+                ///cout << front << ": ";
 
-        for (int num: vec) {
-           /// cout << num << " ";
-            if (arr[num] == false) {
-                arr[num] = true;
-                sum++;
-                current.push(num);
+                for (int num: vec) {
+                    /// cout << num << " ";
+                    if (arr[num] == false) {
+                        arr[num] = true;
+                        current.push(num);
+                    }
+                }
+                ///cout << endl;
+                current.pop();
             }
         }
-        ///cout << endl;
-        current.pop();
     }
 
-//    for (int i = 0; i < com; ++i) {
-//        cout << i << ": ";
-//        bool b = arr[i];
-//        cout << b << "\n ";
-//
-//    }
+
+
 cout<<sum;
     return 0;
 }
