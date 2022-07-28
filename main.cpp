@@ -10,117 +10,135 @@
 
 using namespace std;
 
-template<class T>
-class dual_priority_queue {
-public:
-    void push(T num) {
-        queMin.push(num);
-        queMax.push(num);
-        count[num]++;
-    }
-
-    void pop_min() {
-        cleanMin();
-        assert(!queMin.empty());
-
-        count[queMin.top()]--;
-        queMin.pop();
-    }
-
-    void pop_max() {
-        cleanMax();
-        assert(!queMin.empty());
-
-        count[queMax.top()]--;
-        queMax.pop();
-    }
-
-    T min() {
-        return queMin.top();
-    }
-
-    T max() {
-        return queMax.top();
-    }
-
-    bool empty() {
-        cleanMin();
-        cleanMax();
-
-        if (queMin.empty() || queMax.empty())
-            return true;
-
-        return false;
-    }
-
-
-private:
-    priority_queue<T, vector<T>, greater<>> queMin;
-    priority_queue<T, vector<T>, less<>> queMax;
-    map<T, int> count;
-
-    void cleanMin() {
-        while (!queMin.empty() && count[queMin.top()] == 0) {
-            // 맨 위가 없는 번호이면
-            queMin.pop();
-        }
-    }
-
-    void cleanMax() {
-        while (!queMax.empty() && count[queMax.top()] == 0) {
-            // 맨 위가 없는 번호이면
-            queMax.pop();
-        }
-    }
-
-};
-
-
-void realPlay() {
-    int ind;
-    cin >> ind;
-    dual_priority_queue<int> myque;
-
-    for (int i = 0; i < ind; ++i) {
-        char order;
-        int num;
-        cin >> order >> num;
-
-        if (order == 'I') {
-            myque.push(num);
-
-        } else if (order == 'D') {
-            if (num == -1) {
-                if (!myque.empty()) {
-                    myque.pop_min();
-                }
-            } else if (num == 1) {
-                if (!myque.empty()) {
-                    myque.pop_max();
-                }
-            }
-        }
-
-    }
-    // 프린트
-    if (myque.empty()) {
-        cout << "EMPTY\n";
-    } else {
-        cout << myque.max() << " " << myque.min() << "\n";
-    }
-
-}
-
 // 1초: 1억번
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int co;
-    cin >> co;
-    for (int i = 0; i < co; ++i) {
-        realPlay();
+
+    int x, y;
+    cin >> x >> y;
+
+
+    int **arr = new int *[y]; //선언하고자 하는 이차원 배열의 행의 수 만큼 동적 할당
+    for (int i = 0; i < y; i++) //각각의 인덱스에 선언하고자 하는 배열의 크기만큼을 가르키게 함.
+        arr[i] = new int[x];
+
+    queue<pair<int, int>> que;
+
+    for (int i = 0; i < y; ++i) {
+        for (int j = 0; j < x; ++j) {
+            cin >> arr[i][j];
+        }
     }
+
+    int sum = 0;
+
+    for (int i = 0; i < y; ++i) {
+        for (int j = 0; j < x; ++j) {
+            if (arr[i][j] == 1) {
+                pair<int, int> pa;
+                pa.first = j;
+                pa.second = i;
+                que.push(pa);
+            }
+        }
+    }
+
+
+    while (!que.empty()) {
+        int size = que.size();
+        bool isChanged= false;
+
+        for (int i = 0; i < size; ++i) {
+            pair<int, int> pa = que.front();
+            que.pop();
+            const int X = pa.first;
+            const int Y = pa.second;
+
+            // cout<<"i: "<<i<<", x: "<<X<<", y: "<<Y<<", sum: "<<sum<<endl;
+            //cout << "sum: " << sum << ", x: " << X << ", y: " << Y << endl;
+            // 왼쪽
+            if (X > 0 && arr[Y][X - 1] == 0) {
+                arr[Y][X - 1] = 1;
+                pair<int, int> tuple;
+                tuple.first = X - 1;
+                tuple.second = Y;
+                que.push(tuple);
+                isChanged= true;
+            }
+            // 오른쪽
+            if (X < x - 1 && arr[Y][X + 1] == 0) {
+                arr[Y][X + 1] = 1;
+                pair<int, int> tuple;
+                tuple.first = X + 1;
+                tuple.second = Y;
+                que.push(tuple);
+                isChanged= true;
+            }
+            // 위쪽
+            if (Y > 0 && arr[Y - 1][X] == 0) {
+                arr[Y - 1][X] = 1;
+                pair<int, int> tuple;
+                tuple.first = X;
+                tuple.second = Y - 1;
+                que.push(tuple);
+                isChanged= true;
+            }
+            // 아래쪽
+            if (Y < y - 1 && arr[Y + 1][X] == 0) {
+                arr[Y + 1][X] = 1;
+                pair<int, int> tuple;
+                tuple.first = X;
+                tuple.second = Y + 1;
+                que.push(tuple);
+                isChanged= true;
+            }
+        }
+
+        if(isChanged){
+            sum++;
+        }
+
+
+
+//        /// print
+//        for (int i = 0; i < y; ++i) {
+//            for (int j = 0; j < x; ++j) {
+//                cout << arr[i][j] << " ";
+//            }
+//            cout << endl;
+//        }
+//        /// print
+
+
+    }
+
+    bool complete= true;
+    for (int i = 0; i < y; ++i) {
+        for (int j = 0; j < x; ++j) {
+            if(arr[i][j]==0){
+                complete= false;
+            }
+        }
+    }
+
+    if(complete){
+        cout << sum;
+    }else{
+        cout<<-1;
+    }
+
+
+
+//    /// print
+//    for (int i = 0; i < y; ++i) {
+//        for (int j = 0; j < x; ++j) {
+//            cout << arr[i][j] << " ";
+//        }
+//        cout << endl;
+//    }
+//    /// print
 
 
     return 0;
