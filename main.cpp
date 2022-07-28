@@ -16,36 +16,40 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int ind;
-    cin >> ind;
+    int index;
+    cin >> index;
+    vector<int> oriVec;
 
     vector<int> vec;
+    map<int, int> myMap;
 
 
-    for (int i = 0; i < ind; ++i) {
-        int a;
-        cin >> a;
-        vec.push_back(a);
+    for (int i = 0; i < index; ++i) {
+        int n;
+        cin >> n;
+        oriVec.push_back(n);
+        vec.push_back(n);
     }
-
 
     std::sort(vec.begin(), vec.end());
 
+    int x=1;
 
-    int current = 0;
-    int sum = 0;
+    for (int i = 0; i < index; ++i) {
+        int num = vec[i];
 
-    for (int time: vec) {
-        current += time;
-        // cout << current << " ";
-
-        sum += current;
+        if(myMap[num]==0){
+            myMap[num]=x;
+            x++;
+        }
     }
 
-    cout << sum;
+    for (int num:oriVec) {
+        cout<<myMap[num]-1<<" ";
+
+    }
 
 
-    return 0;
 }
 
 
