@@ -6,86 +6,68 @@
 #include <queue>
 #include <cmath>
 #include <map>
-
+#include <cassert>
 
 using namespace std;
 
-//1
-//7
-//I 16
-//I -5643
-//D -1
-//D 1
-//D 1
-//I 123
-//D -1
-
+template<class T>
 class dual_priority_queue {
 public:
-    void push(int num) {
+    void push(T num) {
         queMin.push(num);
         queMax.push(num);
-        if(count.count(num)==0){
-            count[num]=1;
-        }else{
-            count[num]++;
-        }
-
-
+        count[num]++;
     }
 
     void pop_min() {
-        resetMin();
-        resetMax();
+        cleanMin();
+        assert(!queMin.empty());
 
-        // 배열 비어있으면 오류남
         count[queMin.top()]--;
         queMin.pop();
-
     }
 
     void pop_max() {
-        resetMin();
-        resetMax();
+        cleanMax();
+        assert(!queMin.empty());
 
         count[queMax.top()]--;
         queMax.pop();
     }
 
-    int min() {
+    T min() {
         return queMin.top();
     }
 
-    int max() {
+    T max() {
         return queMax.top();
     }
 
     bool empty() {
+        cleanMin();
+        cleanMax();
 
-        resetMin();
-        resetMax();
-        if (queMin.empty() || queMax.empty()) {
+        if (queMin.empty() || queMax.empty())
             return true;
-        } else {
-            return false;
-        }
+
+        return false;
     }
 
 
 private:
-    priority_queue<int, vector<int>, greater<int>> queMin;
-    priority_queue<int, vector<int>, less<int>> queMax;
-    map<int, int> count;
+    priority_queue<T, vector<T>, greater<>> queMin;
+    priority_queue<T, vector<T>, less<>> queMax;
+    map<T, int> count;
 
-    void resetMin() {
-        while (!queMin.empty() && count[queMin.top()] <= 0) {
+    void cleanMin() {
+        while (!queMin.empty() && count[queMin.top()] == 0) {
             // 맨 위가 없는 번호이면
             queMin.pop();
         }
     }
 
-    void resetMax() {
-        while (!queMax.empty() && count[queMax.top()] <= 0) {
+    void cleanMax() {
+        while (!queMax.empty() && count[queMax.top()] == 0) {
             // 맨 위가 없는 번호이면
             queMax.pop();
         }
@@ -93,10 +75,11 @@ private:
 
 };
 
+
 void realPlay() {
     int ind;
     cin >> ind;
-    dual_priority_queue myque;
+    dual_priority_queue<int> myque;
 
     for (int i = 0; i < ind; ++i) {
         char order;
