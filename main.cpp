@@ -1,4 +1,3 @@
-
 #include <iostream>
 
 #include <algorithm>
@@ -17,52 +16,33 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    map<int, bool> myMap;
+    int ind;
+    cin >> ind;
 
-    int index;
-    cin >> index;
-
-
-    for (int i = 0; i < index; ++i) {
-        string order;
-
-        cin >> order;
-        int num;
+    vector<int> vec;
 
 
-        if (order == "add") {
-            cin >> num;
-
-            myMap[num] = true;
-        } else if (order == "remove") {
-            cin >> num;
-
-            myMap[num] = false;
-        } else if (order == "check") {
-            cin >> num;
-
-            cout << myMap[num] << '\n';
-
-        } else if (order == "toggle") {
-            cin >> num;
-
-            if (myMap[num]) {
-                myMap[num] = false;
-            } else {
-                myMap[num] = true;
-            }
-
-        } else if (order == "all") {
-            for (int j = 1; j <= 20; ++j) {
-                myMap[j] = true;
-            }
-
-        } else if (order == "empty") {
-            for (int j = 1; j <= 20; ++j) {
-                myMap[j] = false;
-            }
-        }
+    for (int i = 0; i < ind; ++i) {
+        int a;
+        cin >> a;
+        vec.push_back(a);
     }
+
+
+    std::sort(vec.begin(), vec.end());
+
+
+    int current = 0;
+    int sum = 0;
+
+    for (int time: vec) {
+        current += time;
+        // cout << current << " ";
+
+        sum += current;
+    }
+
+    cout << sum;
 
 
     return 0;
