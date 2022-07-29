@@ -5,6 +5,7 @@
 #include <queue>
 #include <cmath>
 #include <map>
+#include <stack>
 #include <cassert>
 
 using namespace std;
@@ -15,20 +16,28 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
+    int index;
+    cin >> index;
+    stack<int> sta;
 
-    int n;
-    cin >> n;
-
-    int arr[1001];
-
-    arr[0] = 1;
-    arr[1] = 1;
-
-    for (int i = 2; i <= n; ++i) {
-        arr[i] = (arr[i - 1] + arr[i - 2]) % 10007;
+    for (int i = 0; i < index; ++i) {
+        int a;
+        cin >> a;
+        if(a==0){
+            sta.pop();
+        }else{
+            sta.push(a);
+        }
     }
 
-    cout << arr[n];
+    int sum=0;
+    while (!sta.empty()) {
+        sum+=sta.top();
+        sta.pop();
+    }
+
+    cout<<sum;
+
 
 }
 
