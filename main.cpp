@@ -11,32 +11,20 @@
 using namespace std;
 
 
-vector<pair<int, int>> node[100001];
-bool check[100001];
-
-pair<int, int> parTree(int position, int lenght) {
-    vector<pair<int, int>> &vec = node[position];
+vector<int> node[100001];
+int depth[100001];
 
 
-    pair<int, int> target = make_pair(position, lenght);
-    for (pair<int, int> pa: vec) {
+void setDep(int n) {
+    for (int arrow: node[n]) {
 
-        if (!check[pa.first]) {
-            ///cout << "po: " << position << ", l: " << pa.first << " " << lenght +pa.second << endl;
-            check[pa.first] = true;
-            pair<int, int> pai = parTree(pa.first, lenght + pa.second);
-
-            // 더 큰거 저장
-            if (target.second <= pai.second) {
-                target = pai;
-            }
+        if (depth[arrow] > depth[n] + 1) {
+            depth[arrow] = depth[n] + 1;
+            setDep(arrow);
         }
+
     }
-
-    return target;
-
 }
-
 
 // 1초: 1억번
 int main() {
@@ -48,46 +36,43 @@ int main() {
 
 
 
+
     /// 입력
     for (int i = 0; i < index - 1; ++i) {
         int po;
         int a;
-        int b;
-        cin >> po >> a >> b;
-        node[po].push_back(make_pair(a, b));
-        node[a].push_back(make_pair(po, b));
+
+        cin >> po >> a;
+
+        node[po].push_back(a);
+        node[a].push_back(po);
     }
+
+    for (int &n: depth) {
+        n = 100001;
+    }
+    depth[1] = 0;
+
+    setDep(1);
 
 
 //    for (int i = 1; i <= index; ++i) {
-//        for (pair<int, int> pai: node[i]) {
-//            cout<<i<<"-"<<pai.first<<" "<<pai.second<<endl;
-//        }
+//        cout << depth[i] << " ";
 //    }
+//cout<<endl;
 
 
-    int start = 1;
-    check[start] = true;
-    pair<int, int> pa = parTree(start, 0);
-
-    ///cout << pa.first << ", " << pa.second << endl;
-
-    // 두번째
-    start = pa.first;
-
-    for (bool &b: check) {
-        b = false;
+    for (int i = 2; i <= index; ++i) {
+        int small = 100001;
+        int nodes;
+        for (int n: node[i]) {
+            if (depth[n] < small) {
+                small = depth[n];
+                nodes = n;
+            }
+        }
+        cout << nodes << "\n";
     }
-
-    check[start] = true;
-    pair<int, int> value = parTree(start, 0);
-
-    ///cout << value.first << ", " << value.second << endl;
-
-
-    cout << value.second;
-
-
 }
 
 
