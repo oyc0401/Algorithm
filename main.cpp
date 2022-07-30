@@ -13,21 +13,42 @@ using namespace std;
 
 int a, b;
 vector<int> vec;
+vector<int> sta;
 
-void print(int n, string text, int depth) {
+void print(int depth) {
 
-    for (int i = n; i < a; ++i) {
-        // cout << "def: " << def << ", n: " << n << endl;
-        string te = text + to_string(vec[i]) + " ";
 
-        if (depth == b) {
-            cout << te << endl;
-        } else {
-            print(i + 1, te, depth + 1);
+    for (int i = 0; i < a; ++i) {
+        // cout << "depth: " << depth << ", i: " << i << endl;
+
+        // 이미 배열에 i 값이 존재하면 건너뛰기
+        bool empty = true;
+        for (int num: sta) {
+            if (num == i) {
+                empty = false;
+            }
         }
-    }
-}
 
+        sta.push_back(i);
+
+        if (empty) {
+            if (depth == b) {
+                // cout << te << endl;
+                for (int num: sta) {
+                    cout << vec[num] << " ";
+                }
+                cout << "\n";
+
+            } else {
+                print(depth + 1);
+
+            }
+        }
+
+        sta.pop_back();
+    }
+
+}
 
 
 // 1초: 1억번
@@ -41,12 +62,12 @@ int main() {
 
     for (int i = 0; i < a; ++i) {
         int num;
-        cin>>num;
+        cin >> num;
         vec.push_back(num);
     }
 
     std::sort(vec.begin(), vec.end());
 
-    print(0, "", 1);
+    print(1);
 
 }
