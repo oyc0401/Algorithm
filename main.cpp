@@ -12,12 +12,13 @@ using namespace std;
 
 
 int a, b;
+vector<int> vec;
 
 void print(int n, string text, int depth) {
 
-    for (int i = n; i <= a; ++i) {
+    for (int i = n; i < a; ++i) {
         // cout << "def: " << def << ", n: " << n << endl;
-        string te = text + to_string(i) + " ";
+        string te = text + to_string(vec[i]) + " ";
 
         if (depth == b) {
             cout << te << endl;
@@ -26,6 +27,8 @@ void print(int n, string text, int depth) {
         }
     }
 }
+
+
 
 // 1초: 1억번
 int main() {
@@ -36,6 +39,14 @@ int main() {
 
     cin >> a >> b;
 
-    print(1, "", 1);
+    for (int i = 0; i < a; ++i) {
+        int num;
+        cin>>num;
+        vec.push_back(num);
+    }
+
+    std::sort(vec.begin(), vec.end());
+
+    print(0, "", 1);
 
 }
