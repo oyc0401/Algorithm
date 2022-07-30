@@ -11,18 +11,19 @@
 using namespace std;
 
 
-vector<int> node[100001];
-int depth[100001];
+int a, b;
 
+void print(int n, string text, int depth) {
 
-void setDep(int n) {
-    for (int arrow: node[n]) {
+    for (int i = n; i <= a; ++i) {
+        // cout << "def: " << def << ", n: " << n << endl;
+        string te = text + to_string(i) + " ";
 
-        if (depth[arrow] > depth[n] + 1) {
-            depth[arrow] = depth[n] + 1;
-            setDep(arrow);
+        if (depth == b) {
+            cout << te << endl;
+        } else {
+            print(i , te, depth + 1);
         }
-
     }
 }
 
@@ -31,48 +32,10 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int index;
-    cin >> index;
 
 
+    cin >> a >> b;
 
+    print(1, "", 1);
 
-    /// 입력
-    for (int i = 0; i < index - 1; ++i) {
-        int po;
-        int a;
-
-        cin >> po >> a;
-
-        node[po].push_back(a);
-        node[a].push_back(po);
-    }
-
-    for (int &n: depth) {
-        n = 100001;
-    }
-    depth[1] = 0;
-
-    setDep(1);
-
-
-//    for (int i = 1; i <= index; ++i) {
-//        cout << depth[i] << " ";
-//    }
-//cout<<endl;
-
-
-    for (int i = 2; i <= index; ++i) {
-        int small = 100001;
-        int nodes;
-        for (int n: node[i]) {
-            if (depth[n] < small) {
-                small = depth[n];
-                nodes = n;
-            }
-        }
-        cout << nodes << "\n";
-    }
 }
-
-
