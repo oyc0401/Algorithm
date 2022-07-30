@@ -11,42 +11,29 @@
 using namespace std;
 
 
-int a, b;
-vector<int> vec;
-vector<int> sta;
+vector<pair<int, int>> node[100001];
+bool check[100001];
 
-void print(int depth) {
+pair<int, int> parTree(int position, int lenght) {
+    vector<pair<int, int>> &vec = node[position];
 
 
-    for (int i = 0; i < a; ++i) {
-        // cout << "depth: " << depth << ", i: " << i << endl;
+    pair<int, int> target = make_pair(position, lenght);
+    for (pair<int, int> pa: vec) {
 
-        // 이미 배열에 i 값이 존재하면 건너뛰기
-        bool empty = true;
-        for (int num: sta) {
-            if (num == i) {
-                empty = false;
+        if (!check[pa.first]) {
+            ///cout << "po: " << position << ", l: " << pa.first << " " << lenght +pa.second << endl;
+            check[pa.first] = true;
+            pair<int, int> pai = parTree(pa.first, lenght + pa.second);
+
+            // 더 큰거 저장
+            if (target.second <= pai.second) {
+                target = pai;
             }
         }
-
-        sta.push_back(i);
-
-        if (empty) {
-            if (depth == b) {
-                // cout << te << endl;
-                for (int num: sta) {
-                    cout << vec[num] << " ";
-                }
-                cout << "\n";
-
-            } else {
-                print(depth + 1);
-
-            }
-        }
-
-        sta.pop_back();
     }
+
+    return target;
 
 }
 
@@ -56,18 +43,51 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
+    int index;
+    cin >> index;
 
 
-    cin >> a >> b;
 
-    for (int i = 0; i < a; ++i) {
-        int num;
-        cin >> num;
-        vec.push_back(num);
+    /// 입력
+    for (int i = 0; i < index - 1; ++i) {
+        int po;
+        int a;
+        int b;
+        cin >> po >> a >> b;
+        node[po].push_back(make_pair(a, b));
+        node[a].push_back(make_pair(po, b));
     }
 
-    std::sort(vec.begin(), vec.end());
 
-    print(1);
+//    for (int i = 1; i <= index; ++i) {
+//        for (pair<int, int> pai: node[i]) {
+//            cout<<i<<"-"<<pai.first<<" "<<pai.second<<endl;
+//        }
+//    }
+
+
+    int start = 1;
+    check[start] = true;
+    pair<int, int> pa = parTree(start, 0);
+
+    ///cout << pa.first << ", " << pa.second << endl;
+
+    // 두번째
+    start = pa.first;
+
+    for (bool &b: check) {
+        b = false;
+    }
+
+    check[start] = true;
+    pair<int, int> value = parTree(start, 0);
+
+    ///cout << value.first << ", " << value.second << endl;
+
+
+    cout << value.second;
+
 
 }
+
+
