@@ -10,25 +10,59 @@
 
 using namespace std;
 
+int a;
 
-int a, b;
-vector<int> vec;
+int divi;
 
-void print(int n, string text, int depth) {
+map<int, int> myMap;
+map<int, bool> check;
 
-    for (int i = n; i < a; ++i) {
-        // cout << "def: " << def << ", n: " << n << endl;
-        string te = text + to_string(vec[i]) + " ";
 
-        if (depth == b) {
-            cout << te << endl;
-        } else {
-            print(i , te, depth + 1);
+/// 이 함수는 왜 안될까? 미래의 나는 알겠지?
+int pows(int zi) {
+
+    if (check[zi]) {
+        return myMap[zi] % divi;
+    }
+
+
+    cout << zi << endl;
+
+    if (zi % 2 == 0) {
+        unsigned long long num = (((pows(zi / 2) % divi) * (pows(zi / 2)) % divi)) % divi;
+        myMap[zi] = num;
+        check[zi] = true;
+        return num;
+    } else {
+        unsigned long long t = ((pows((zi - 1) / 2) % divi) * (pows((zi - 1) / 2) % divi)) % divi;
+
+
+        unsigned long long num = ((a % divi) * (t % divi)) % divi;
+        if (zi == 51) {
+            cout << zi << "나누기 2: ";
+            cout << pows((zi - 1) / 2) << endl;
+            cout << zi << "나누기 2 x: ";
+            cout << 33554432 * 33554432 << endl;
+//            cout<<a % divi<<endl;
+//            cout<<t % divi<<endl;
+//            cout<<((a % divi) * (t % divi))<<endl;
+//            cout<<num<<endl;
         }
+        myMap[zi] = num;
+        check[zi] = true;
+        return num;
     }
 }
 
 
+long long int f(long long int y) {
+    if (y == 1) return a % divi;
+
+    long long int k = f(y / 2) % divi;
+
+    if (y % 2 == 0) return k * k % divi;
+    else return k * k % divi * a % divi;
+}
 
 // 1초: 1억번
 int main() {
@@ -36,25 +70,23 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
+    int zisu;
 
-    cin >> a >> b;
+    cin >> a >> zisu >> divi;
+    cout << f(zisu);
 
-    map<int,bool> myMap;
-    for (int i = 0; i < a; ++i) {
-        int num;
-        cin>>num;
-        myMap[num]= true;
-    }
 
-    for (pair<int,bool> pa:myMap) {
-        if(pa.second){
-            vec.push_back(pa.first);
-        }
-    }
+    // 이건 왜 안될까?
+//    myMap[1] = a % divi;
+//    check[1] = true;
+//    long long number = pows(zisu);
+//    cout << number;
 
-    a= vec.size();
-    std::sort(vec.begin(), vec.end());
 
-    print(0, "", 1);
+// 2147483647 2147483645 1000000
+// 2147483647 214748364 2147483645
+
+
+
 
 }
