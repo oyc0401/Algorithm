@@ -10,59 +10,95 @@
 
 using namespace std;
 
-int a;
+class arrow {
+public:
+    arrow(int node, int target, int weight) : node(node), target(target), weight(weight) {
 
-int divi;
-
-map<int, int> myMap;
-map<int, bool> check;
-
-
-/// 이 함수는 왜 안될까? 미래의 나는 알겠지?
-int pows(int zi) {
-
-    if (check[zi]) {
-        return myMap[zi] % divi;
     }
 
+    string to_string() {
+        string a = "(" + std::to_string(node) + ", " + std::to_string(target)
+                   + ", " + std::to_string(weight) + ")";
+        return a;
+    }
 
-    cout << zi << endl;
+    int node, target, weight;
+private:
 
-    if (zi % 2 == 0) {
-        unsigned long long num = (((pows(zi / 2) % divi) * (pows(zi / 2)) % divi)) % divi;
-        myMap[zi] = num;
-        check[zi] = true;
-        return num;
-    } else {
-        unsigned long long t = ((pows((zi - 1) / 2) % divi) * (pows((zi - 1) / 2) % divi)) % divi;
+};
 
+int dist[501];
+vector<arrow> vec;
+const int INF = 10000000;
+int nodeNum, roadNum, wormNum;
 
-        unsigned long long num = ((a % divi) * (t % divi)) % divi;
-        if (zi == 51) {
-            cout << zi << "나누기 2: ";
-            cout << pows((zi - 1) / 2) << endl;
-            cout << zi << "나누기 2 x: ";
-            cout << 33554432 * 33554432 << endl;
-//            cout<<a % divi<<endl;
-//            cout<<t % divi<<endl;
-//            cout<<((a % divi) * (t % divi))<<endl;
-//            cout<<num<<endl;
+bool bell() {
+    dist[1] = 0;
+    for (int i = 0; i < nodeNum; ++i) {
+        for (arrow arr: vec) {
+            if ( dist[arr.target] > dist[arr.node] + arr.weight) {
+                //cout<<arr.to_string()<<endl;
+                dist[arr.target] = dist[arr.node] + arr.weight;
+                if (i == nodeNum - 1) {
+                    return true;
+                }
+            }
         }
-        myMap[zi] = num;
-        check[zi] = true;
-        return num;
     }
+    return false;
 }
 
+void going() {
 
-long long int f(long long int y) {
-    if (y == 1) return a % divi;
+    vec.clear();
 
-    long long int k = f(y / 2) % divi;
+    // 거리 초기화
+    for (int i = 0; i < 501; ++i) {
+        dist[i] = INF;
+    }
 
-    if (y % 2 == 0) return k * k % divi;
-    else return k * k % divi * a % divi;
+    cin >> nodeNum >> roadNum >> wormNum;
+
+    for (int i = 0; i < roadNum; ++i) {
+        int node, target, weight;
+        cin >> node >> target >> weight;
+        vec.push_back(arrow(node, target, weight));
+        vec.push_back(arrow(target, node, weight));
+    }
+    for (int i = 0; i < wormNum; ++i) {
+        int node, target, weight;
+        cin >> node >> target >> weight;
+        vec.push_back(arrow(node, target, -weight));
+
+    }
+
+//    /// 간선 프린트
+//    for (int i = 0; i < vec.size(); ++i) {
+//        cout << vec[i].to_string() << ", ";
+//    }
+//    cout << endl;
+//    /// 간선 프린트
+
+
+    bool isCycle = bell();
+
+
+    if (isCycle) {
+        // 음수 순환 발생
+        cout << "YES";
+    } else {
+        // 음수 순환 안발생
+        cout << "NO";
+    }
+    cout << endl;
+
+//    /// 거리 프린트
+//    for (int i = 1; i <= nodeNum; ++i) {
+//        cout << dist[i] << ", ";
+//    }
+//    /// 거리 프린트
 }
+
 
 // 1초: 1억번
 int main() {
@@ -70,23 +106,21 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int zisu;
+    int ind;
+    cin>>ind;
 
-    cin >> a >> zisu >> divi;
-    cout << f(zisu);
-
-
-    // 이건 왜 안될까?
-//    myMap[1] = a % divi;
-//    check[1] = true;
-//    long long number = pows(zisu);
-//    cout << number;
-
-
-// 2147483647 2147483645 1000000
-// 2147483647 214748364 2147483645
-
-
-
+    for (int i = 0; i < ind; ++i) {
+        going();
+    }
 
 }
+//3 3 1
+//1 2 2
+//1 3 4
+//2 3 1
+//3 1 3
+
+//3 2 1
+//1 2 3
+//2 3 4
+//3 1 8
