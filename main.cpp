@@ -44,37 +44,42 @@ int main() {
     map<int, int> aMap;
     map<int, int> bMap;
 
-    int n, m;
-    cin >> n >> m;
+    int num;
+    cin >> num;
     vector<int> primes;
 
-    setPrimeNumbers(100, primes);
+    setPrimeNumbers(501, primes);
 
     /// nCm = n! / ((n-m)! * m!)
-    factorization(n, myMap, primes);
-    factorization(n - m, aMap, primes);
-    factorization(m, bMap, primes);
+    factorization(num, myMap, primes);
 
+    int a = myMap[2];
+    int b = myMap[5];
+    int small = a < b ? a : b;
+    cout << small;
+//    factorization(n - m, aMap, primes);
+//    factorization(m, bMap, primes);
+//
+//
+//    // 분모 나누기
+//    for (pair<int, int> itr: aMap) {
+//        myMap[itr.first] -= itr.second;
+//    }
+//    for (pair<int, int> itr: bMap) {
+//        myMap[itr.first] -= itr.second;
+//    }
+//
+//    unsigned long long int num = 1;
+//    //출력
+//    for (pair<int, int> itr: myMap) {
+//        for (int i = 0; i < itr.second; i++) {
+//            num *= itr.first;
+//        }
+//
+//        // cout << itr.first << ": " << itr.second << endl;
+//    }
 
-    // 분모 나누기
-    for (pair<int, int> itr: aMap) {
-        myMap[itr.first] -= itr.second;
-    }
-    for (pair<int, int> itr: bMap) {
-        myMap[itr.first] -= itr.second;
-    }
-
-    unsigned long long int num = 1;
-    //출력
-    for (pair<int, int> itr: myMap) {
-        for (int i = 0; i < itr.second; i++) {
-            num *= itr.first;
-        }
-
-        // cout << itr.first << ": " << itr.second << endl;
-    }
-
-    cout << num;
+    //cout << num;
 
 
     return 0;
