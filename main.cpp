@@ -7,11 +7,62 @@
 #include <cassert>
 #include <iomanip>
 #include <cstdio>
+#include <stack>
 
 
 using namespace std;
-int n;
-int dp[2][1000002];
+
+int node, ind, start;
+vector<int> edge[1001];
+
+bool DFS_check[1001];
+bool BFS_check[1001];
+
+
+//stack<int> printStack;
+queue<int> printDFS;
+queue<int> printQue;
+
+void DFS(int num) {
+
+    /// cout << num << " ";
+    DFS_check[num] = true;
+
+    for (int n: edge[num]) {
+        if (!DFS_check[n]) {
+            printDFS.push(n);
+            DFS(n);
+        }
+    }
+
+
+}
+
+void BFS(int num) {
+    queue<int> que;
+
+    // 처음 큐 넣기
+    que.push(num);
+
+    // 큐 순환
+    while (!que.empty()) {
+        /// cout<<que.front()<<" ";
+
+        if (!BFS_check[que.front()]) {
+            BFS_check[que.front()] = true;
+            printQue.push(que.front());
+
+            for (int n: edge[que.front()]) {
+                que.push(n);
+            }
+        }
+
+        que.pop();
+    }
+
+
+}
+
 
 // 1초: 1억번
 int main() {
@@ -19,34 +70,34 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int T, input;
-    cin>>T;
+    cin >> node >> ind >> start;
 
-    for (int t = 0; t < T; t++) {
-        cin>>n;
+    for (int i = 0; i < ind; ++i) {
+        int a, b;
+        cin >> a >> b;
+        edge[a].push_back(b);
+        edge[b].push_back(a);
+    }
 
-        for (int i = 0; i < 2; i++) {
-            for (int j = 2; j < n+2; j++) {
-                cin>>input;
-                dp[i][j] = input;
-            }
-        }
+    // 정렬
+    for (vector<int> &v: edge) {
+        std::sort(v.begin(), v.end());
+    }
 
-        for (int i = 2; i < n + 2; i++) {
-            for (int j = 0; j < 2; j++) {
 
-                //윗쪽 행이면 대각선은 [j+1][i-1], [j+1][i-2]
-                if (j == 0) {
-                    dp[j][i] = dp[j][i] + max(dp[j + 1][i - 1], dp[j + 1][i - 2]);
-                }
-                    //아랫쪽 행이면 대각선은 [j-1][i-1], [j-1][i-2]
-                else if (j == 1) {
-                    dp[j][i] = dp[j][i] + max(dp[j - 1][i - 1], dp[j - 1][i - 2]);
-                }
-            }
-        }
+    printDFS.push(start);
+    DFS(start);
+    while (!printDFS.empty()) {
+        cout << printDFS.front() << " ";
+        printDFS.pop();
+    }
 
-        cout<<max(dp[0][n+1], dp[1][n+1])<<"\n";
+    cout<<"\n";
+
+    BFS(start);
+    while (!printQue.empty()) {
+        cout << printQue.front() << " ";
+        printQue.pop();
     }
 
     return 0;
