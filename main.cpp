@@ -29,7 +29,7 @@ public:
 
 
 string *board;
-
+bool visted[10][10][10][10];
 
 void MoveR(quadruple &current, int mX, int mY) {
     // 빨강
@@ -230,30 +230,42 @@ int main() {
 
     position.move = 0;
     position.last = direction::no;
+    //visted[position.Rx][position.Rx][position.Bx][position.Bx] = true;
     que.push(position);
 
     while (!que.empty()) {
 
+        //cout<<que.front().toString()<<"\n";
         if (que.front().Bx == goleX && que.front().By == goleY) {
             // 파랑 도착함
         } else if (que.front().Rx == goleX && que.front().Ry == goleY) {
             cout << que.front().move;
             ///cout << "빨강 도착: " << que.front().move;
             return 0;
-        } else if (que.front().move < 10) {
+            //} else if (que.front().move < 10) {
+        } else {
             quadruple moved;
 
             if (que.front().last != direction::top) {
                 moved = tilt(que.front(), direction::top);
                 moved.move++;
                 moved.last = direction::top;
-                que.push(moved);
+
+                if (!visted[moved.Rx][moved.Ry][moved.Bx][moved.By]) {
+                    visted[moved.Rx][moved.Ry][moved.Bx][moved.By] = true;
+                    que.push(moved);
+                }
+
             }
             if (que.front().last != direction::bottom) {
                 moved = tilt(que.front(), direction::bottom);
                 moved.move++;
                 moved.last = direction::bottom;
-                que.push(moved);
+
+                if (!visted[moved.Rx][moved.Ry][moved.Bx][moved.By]) {
+                    visted[moved.Rx][moved.Ry][moved.Bx][moved.By] = true;
+                    que.push(moved);
+                }
             }
 
 
@@ -261,7 +273,11 @@ int main() {
                 moved = tilt(que.front(), direction::left);
                 moved.move++;
                 moved.last = direction::left;
-                que.push(moved);
+
+                if (!visted[moved.Rx][moved.Ry][moved.Bx][moved.By]) {
+                    visted[moved.Rx][moved.Ry][moved.Bx][moved.By] = true;
+                    que.push(moved);
+                }
             }
 
 
@@ -269,10 +285,15 @@ int main() {
                 moved = tilt(que.front(), direction::right);
                 moved.move++;
                 moved.last = direction::right;
-                que.push(moved);
+
+                if (!visted[moved.Rx][moved.Ry][moved.Bx][moved.By]) {
+                    visted[moved.Rx][moved.Ry][moved.Bx][moved.By] = true;
+                    que.push(moved);
+                }
             }
 
         }
+
 
         que.pop();
     }
