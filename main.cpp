@@ -11,11 +11,16 @@
 
 
 using namespace std;
+enum direction {
+    top, bottom, left, right, no
+};
 
 class quadruple {
 public:
     int Rx, Ry;
     int Bx, By;
+    int move;
+    direction last;
 
     string toString() {
         return "(" + to_string(Rx) + ", " + to_string(Ry) + "), (" + to_string(Bx) + ", " + to_string(By) + ")";
@@ -25,9 +30,6 @@ public:
 
 string *board;
 
-enum direction {
-    top, bottom, left, right
-};
 
 void MoveR(quadruple &current, int mX, int mY) {
     // 빨강
@@ -134,34 +136,7 @@ quadruple tilt(quadruple current, direction direc) {
 
 }
 
-
-//void BFS(int num) {
-//    queue<int> que;
-//
-//    // 처음 큐 넣기
-//    que.push(num);
-//
-//    // 큐 순환
-//    while (!que.empty()) {
-//        /// cout<<que.front()<<" ";
-//
-//        if (!BFS_check[que.front()]) {
-//            BFS_check[que.front()] = true;
-//            printQue.push(que.front());
-//
-//            for (int n: edge[que.front()]) {
-//                que.push(n);
-//            }
-//        }
-//
-//        que.pop();
-//    }
-//
-//
-//}
-
-
-void startGame(quadruple moved,int N,int M){
+void startGame(quadruple moved, int N, int M) {
     /// print
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < M; ++j) {
@@ -222,12 +197,15 @@ int main() {
 
     board = new string[N]; //선언하고자 하는 이차원 배열의 행의 수 만큼 동적 할당
 
+
+    /// 입력
     for (int i = 0; i < N; ++i) {
         cin >> board[i];
     }
 
     quadruple position{};
 
+    int goleX, goleY;
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < M; ++j) {
             if (board[i][j] == 'R') {
@@ -240,33 +218,69 @@ int main() {
                 position.Bx = j;
                 board[i][j] = '.';
             }
+            if (board[i][j] == 'O') {
+                goleY = i;
+                goleX = j;
+            }
         }
     }
 
+    /// BFS
+    queue<quadruple> que;
 
-//    for (int i = 0; i < N; ++i) {
-//        cout << board[i] << " ";
-//        cout << endl;
-//    }
-//
-//    cout << "처음: " << position.toString() << endl;
+    position.move = 0;
+    position.last = direction::no;
+    que.push(position);
+
+    while (!que.empty()) {
+
+        if (que.front().Bx == goleX && que.front().By == goleY) {
+            // 파랑 도착함
+        } else if (que.front().Rx == goleX && que.front().Ry == goleY) {
+            cout << que.front().move;
+            ///cout << "빨강 도착: " << que.front().move;
+            return 0;
+        } else if (que.front().move < 10) {
+            quadruple moved;
+
+            if (que.front().last != direction::top) {
+                moved = tilt(que.front(), direction::top);
+                moved.move++;
+                moved.last = direction::top;
+                que.push(moved);
+            }
+            if (que.front().last != direction::bottom) {
+                moved = tilt(que.front(), direction::bottom);
+                moved.move++;
+                moved.last = direction::bottom;
+                que.push(moved);
+            }
 
 
-    startGame(position,N,M);
+            if (que.front().last != direction::left) {
+                moved = tilt(que.front(), direction::left);
+                moved.move++;
+                moved.last = direction::left;
+                que.push(moved);
+            }
 
 
-//    quadruple moved = tilt(position, direction::top);
-//    cout << moved.toString() << endl;
-//
-//
-//    moved = tilt(moved, direction::left);
-//    cout << moved.toString() << endl;
-//
-//    moved = tilt(moved, direction::right);
-//    cout << moved.toString() << endl;
-//
-//    moved = tilt(moved, direction::bottom);
-//    cout << moved.toString() << endl;
+            if (que.front().last != direction::right) {
+                moved = tilt(que.front(), direction::right);
+                moved.move++;
+                moved.last = direction::right;
+                que.push(moved);
+            }
+
+        }
+
+        que.pop();
+    }
+    cout << -1;
+
+
+
+    //startGame(position,N,M);
 
     return 0;
 }
