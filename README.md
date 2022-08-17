@@ -1,6 +1,10 @@
 # algorithm
 
 ### 백준 문제풀이 저장소
+
+[![Solved.ac
+프로필](http://mazassumnida.wtf/api/v2/generate_badge?boj=oyc0401)](https://solved.ac/oyc0401)
+
 해결한 알고리즘들을 저장해요
 
 ------------
