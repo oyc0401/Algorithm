@@ -10,6 +10,43 @@
 
 using namespace std;
 
+vector<int> arr[101];
+int dist[101][101];
+int INF = 1000000;
+
+int cn(int num) {
+    for (int i = 0; i < 101; ++i) {
+        for (int j = 0; j < 101; ++j) {
+            dist[i][j] = INF;
+        }
+    }
+
+    queue<int> que;
+    que.push(num);
+    dist[num][num] = 0;
+
+
+    while (!que.empty()) {
+        for (int n: arr[que.front()]) {
+            //cout << n << endl;
+            if (dist[num][n] > dist[num][que.front()] + 1) {
+                dist[num][n] = dist[num][que.front()] + 1;
+                que.push(n);
+            }
+        }
+
+        que.pop();
+    }
+
+    int sum = 0;
+
+    for (int a: dist[num]) {
+        if (a != INF) {
+            sum += a;
+        }
+    }
+    return sum;
+}
 
 // 1초: 1억번
 int main() {
@@ -17,37 +54,35 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int target, ind;
-    cin >> target >> ind;
+
+    int node, edge;
+    cin >> node >> edge;
+
     vector<int> vec;
-    for (int i = 0; i < ind; ++i) {
-        int n;
-        cin >> n;
-        vec.push_back(n);
+    for (int i = 0; i < edge; ++i) {
+        int a, b;
+        cin >> a >> b;
+        arr[a].push_back(b);
+        arr[b].push_back(a);
     }
 
-    int minClick=abs(100 - target);
+    int small =INF;
+    int person = 0;
 
-    for (int i = 0; i <= 1000000; ++i) {
-        string text = to_string(i);
-
-        bool canShow = true;
-        for (int n: vec) {
-            if (text.find(to_string(n)) != std::string::npos) {
-                canShow = false;
-            }
+    for (int i = 1; i <= node; ++i) {
+        int sum = cn(i);
+        if (small > sum) {
+            small = sum;
+            person = i;
         }
-
-        if (canShow && abs(i - target)+to_string(i).size() < minClick) {
-           /// cout << i << '\n';
-            minClick=abs(i - target)+to_string(i).size();
-        }
+//        cout << cn(i) << endl;
+//        for (int k = 0; k < 100; ++k) {
+//            cout << dist[i][k] << " ";
+//        }
+//        cout << endl;
     }
-    ///cout << '\n';
-    ///cout<<to_string(number).size()<<'\n';
-    ///cout << minDistance<<'\n';
 
-    cout<<minClick;
+    cout<<person;
 
 }
 //105
