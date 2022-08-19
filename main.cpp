@@ -22,6 +22,8 @@ public:
     int move;
     direction last;
 
+    vector<string> vec;
+
     string toString() {
         return "(" + to_string(Rx) + ", " + to_string(Ry) + "), (" + to_string(Bx) + ", " + to_string(By) + ")";
     }
@@ -239,17 +241,21 @@ int main() {
         if (que.front().Bx == goleX && que.front().By == goleY) {
             // 파랑 도착함
         } else if (que.front().Rx == goleX && que.front().Ry == goleY) {
-            cout<<1;
-            //cout << que.front().move;
+            //cout<<1;
+            cout << que.front().move<<endl;
+            for (string text: que.front().vec) {
+                cout << text;
+            }
             ///cout << "빨강 도착: " << que.front().move;
             return 0;
-            } else if (que.front().move < 10) {
+        } else if (que.front().move < 10) {
 //        } else {
             quadruple moved;
 
             if (que.front().last != direction::top) {
                 moved = tilt(que.front(), direction::top);
                 moved.move++;
+                moved.vec.push_back("U");
                 moved.last = direction::top;
 
                 if (!visted[moved.Rx][moved.Ry][moved.Bx][moved.By]) {
@@ -261,6 +267,7 @@ int main() {
             if (que.front().last != direction::bottom) {
                 moved = tilt(que.front(), direction::bottom);
                 moved.move++;
+                moved.vec.push_back("D");
                 moved.last = direction::bottom;
 
                 if (!visted[moved.Rx][moved.Ry][moved.Bx][moved.By]) {
@@ -273,6 +280,7 @@ int main() {
             if (que.front().last != direction::left) {
                 moved = tilt(que.front(), direction::left);
                 moved.move++;
+                moved.vec.push_back("L");
                 moved.last = direction::left;
 
                 if (!visted[moved.Rx][moved.Ry][moved.Bx][moved.By]) {
@@ -285,6 +293,7 @@ int main() {
             if (que.front().last != direction::right) {
                 moved = tilt(que.front(), direction::right);
                 moved.move++;
+                moved.vec.push_back("R");
                 moved.last = direction::right;
 
                 if (!visted[moved.Rx][moved.Ry][moved.Bx][moved.By]) {
@@ -298,7 +307,7 @@ int main() {
 
         que.pop();
     }
-    cout << 0;
+    cout << -1;
 
 
 
