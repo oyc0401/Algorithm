@@ -11,67 +11,61 @@
 using namespace std;
 
 
-void go(){
-    int len, num;
-    cin >> len >> num;
-
-    int arr[10];
-    for (int i = 0; i <= 9; ++i) {
-        arr[i]=0;
-    }
-    queue<pair<int, int>> que;
-    for (int i = 0; i < len; ++i) {
-        int a;
-        cin >> a;
-        arr[a]++;
-        que.push(make_pair(i, a));
-    }
-
-    int sum = 0;
-
-
-
-    while (!que.empty()) {
-        int index = que.front().first;
-
-
-        bool existBig= false;
-        for (int i = que.front().second+1; i <= 9; ++i) {
-            if(arr[i]!=0){
-                existBig= true;
-            }
-        }
-
-        if(existBig){
-            que.push(que.front());
-            que.pop();
-        }else{
-            sum++;
-            if(index==num){
-                cout<<sum<<'\n';
-                que.pop();
-                return;
-            }else{
-                arr[que.front().second]--;
-                que.pop();
-            }
-
-        }
-    }
-}
-
 // 1초: 1억번
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int n;
-    cin>>n;
-    for (int i = 0; i < n; ++i) {
-        go();
+    int lenght;
+    cin >> lenght;
+    vector<int> vec;
+
+
+    map<int, int> myMap;
+
+    for (int i = 0; i < lenght; ++i) {
+        int a;
+        cin >> a;
+        vec.push_back(a);
+        myMap[a]++;
+    }
+
+    double sum = 0;
+    for (int n: vec) {
+        sum += n;
     }
 
 
+    cout << round(sum / lenght)+1-1<< endl;
+
+    std::sort(vec.begin(), vec.end());
+
+    double middle = vec[lenght / 2];
+    cout << middle << endl;
+
+
+    int big = 0;
+    for (pair<int, int> pa: myMap) {
+        if (big < pa.second) {
+            big = pa.second;
+        }
+    }
+
+    vector<int> bigs;
+    for (pair<int, int> pa: myMap) {
+        if(pa.second==big){
+           bigs.push_back(pa.first);
+        }
+    }
+
+    if(bigs.size()<2){
+        cout<<bigs[0]<<endl;
+    }else{
+        cout<<bigs[1]<<endl;
+    }
+
+
+    cout<<vec[lenght-1]- vec[0];
 
 }
