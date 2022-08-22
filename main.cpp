@@ -10,6 +10,19 @@
 
 using namespace std;
 
+vector<int> vec;
+
+long long int cut(int len) {
+
+    long long int sum = 0;
+    for (int n: vec) {
+        int minus = n - len;
+        if (minus > 0) {
+            sum += minus;
+        }
+    }
+    return sum;
+}
 
 // 1초: 1억번
 int main() {
@@ -17,55 +30,60 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int lenght;
-    cin >> lenght;
-    vector<int> vec;
+    int ind, target;
+    cin >> ind >> target;
 
 
-    map<int, int> myMap;
-
-    for (int i = 0; i < lenght; ++i) {
+    for (int i = 0; i < ind; ++i) {
         int a;
         cin >> a;
         vec.push_back(a);
-        myMap[a]++;
-    }
-
-    double sum = 0;
-    for (int n: vec) {
-        sum += n;
     }
 
 
-    cout << round(sum / lenght)+1-1<< endl;
+    int min = 0;
+    int max = 2000000000;
 
-    std::sort(vec.begin(), vec.end());
+     for (int i = 0; i < 40; ++i) {
+   // while (min != max) {
+        int half = (min + max) / 2;
 
-    double middle = vec[lenght / 2];
-    cout << middle << endl;
+      // cout << half << ", " << min << "~" << max << endl;
+
+        long long int cutted = cut(half);
 
 
-    int big = 0;
-    for (pair<int, int> pa: myMap) {
-        if (big < pa.second) {
-            big = pa.second;
+        if (cutted - target < 0) {
+            ///cout << "다운: " << cutted << endl;
+            max = half;
+        } else {
+           /// cout << "업: " << cutted << endl;
+            min = half;
         }
-    }
 
-    vector<int> bigs;
-    for (pair<int, int> pa: myMap) {
-        if(pa.second==big){
-           bigs.push_back(pa.first);
-        }
-    }
 
-    if(bigs.size()<2){
-        cout<<bigs[0]<<endl;
-    }else{
-        cout<<bigs[1]<<endl;
     }
 
 
-    cout<<vec[lenght-1]- vec[0];
+            if (cut(max) - target < 0) {
+//                max = half;
+//                break;
+                cout << min;
+                return 0;
+            } else {
+//                min = half;
+//                break;
+                cout << max;
+                return 0;
+            }
+
+
+
+//    cout<<min<<endl;
+//    cout << max;
+
 
 }
+
+//2 10000
+//10001 20000
