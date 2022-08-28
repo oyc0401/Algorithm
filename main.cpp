@@ -17,23 +17,39 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int A, B, V;
+    int ind, money;
+    cin >> ind >> money;
 
-    cin >> A >> B >> V;
+    stack<int> sta;
 
-    V -= A;
 
-    if (V < 0) {
-        cout << 1;
+    for (int i = 0; i < ind; ++i) {
+        int a;
+        cin >> a;
+        sta.push(a);
     }
 
+    int current=0;
+    int sum=0;
 
-    int day = (V / (A - B)) + 1;
-    if ((V % (A - B)) != 0) {
-        day++;
+   while (current!=money){
+   // for (int i = 0; i < 10; ++i) {
+
+
+        int top=sta.top();
+        if(money-current-top>=0){
+            current+=top;
+            sum++;
+        }else{
+            sta.pop();
+        }
+
+       // cout<<current<<endl;
     }
 
-    cout << day << endl;
+    cout<<sum;
+
+
 
 
 }
