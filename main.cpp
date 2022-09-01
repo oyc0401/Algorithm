@@ -10,46 +10,69 @@
 
 using namespace std;
 
-
 // 1초: 1억번
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int ind, money;
-    cin >> ind >> money;
 
-    stack<int> sta;
+    vector<string> vec;
 
-
-    for (int i = 0; i < ind; ++i) {
-        int a;
-        cin >> a;
-        sta.push(a);
-    }
-
-    int current=0;
-    int sum=0;
-
-   while (current!=money){
-   // for (int i = 0; i < 10; ++i) {
+    string text = "";
 
 
-        int top=sta.top();
-        if(money-current-top>=0){
-            current+=top;
-            sum++;
-        }else{
-            sta.pop();
+    while (text != ".") {
+        stack<char> sta;
+        getline(cin, text);
+        //cout << text;
+        if(text == "."){
+            return 0;
         }
 
-       // cout<<current<<endl;
+        bool yes= true;
+
+        for (char ch: text) {
+
+            if (ch == '(' || ch == '[') {
+                sta.push(ch);
+            }
+
+            if (ch == ')') {
+                if (!sta.empty() && sta.top() == '(') {
+                    sta.pop();
+                }else{
+                    yes= false;
+                }
+            }else if (ch == ']') {
+                if (!sta.empty() && sta.top() == '[') {
+                    sta.pop();
+                }else{
+                    yes=false;
+                }
+            }
+
+
+        }
+
+        if(!sta.empty()){
+            yes= false;
+        }
+
+
+        if(yes){
+            cout<<"yes\n";
+        } else{
+            cout<<"no\n";
+        }
+
     }
 
-    cout<<sum;
 
+    for (string te: vec) {
 
-
-
+    }
 }
+
+
+
