@@ -17,61 +17,53 @@ int main() {
     cout.tie(NULL);
 
 
-    vector<string> vec;
-
-    string text = "";
+    vector<int> vec[500];
 
 
-    while (text != ".") {
-        stack<char> sta;
-        getline(cin, text);
-        //cout << text;
-        if(text == "."){
-            return 0;
+    int ind;
+    cin >> ind;
+
+    for (int i = 0; i < ind; ++i) {
+        for (int j = 0; j <= i; ++j) {
+            //cout<<i<<", "<<j<<endl;
+            int a;
+            cin >> a;
+            vec[i].push_back(a);
         }
-
-        bool yes= true;
-
-        for (char ch: text) {
-
-            if (ch == '(' || ch == '[') {
-                sta.push(ch);
-            }
-
-            if (ch == ')') {
-                if (!sta.empty() && sta.top() == '(') {
-                    sta.pop();
-                }else{
-                    yes= false;
-                }
-            }else if (ch == ']') {
-                if (!sta.empty() && sta.top() == '[') {
-                    sta.pop();
-                }else{
-                    yes=false;
-                }
-            }
+    }
+//
+//    /// print
+//    for (int i = 0; i < ind; ++i) {
+//        for (int j = 0; j <= i; ++j) {
+//            cout << vec[i][j] << " ";
+//        }
+//        cout << endl;
+//    }
 
 
+    for (int i = ind - 2; i >= 0; --i) {
+       // cout << i << endl;
+
+        for (int j = 0; j < i+1 ; ++j) {
+            int front = vec[i + 1][j];
+            int back = vec[i + 1][j + 1];
+            //cout<<i<<", "<<j<<", "<<front<<endl;
+            //vec[i][j] += front;
+            vec[i][j] += front > back ? front : back;
         }
-
-        if(!sta.empty()){
-            yes= false;
-        }
-
-
-        if(yes){
-            cout<<"yes\n";
-        } else{
-            cout<<"no\n";
-        }
-
     }
 
 
-    for (string te: vec) {
+//    /// print
+//    for (int i = 0; i < ind; ++i) {
+//        for (int j = 0; j <= i; ++j) {
+//            cout << vec[i][j] << " ";
+//        }
+//        cout << endl;
+//    }
 
-    }
+cout<<vec[0][0];
+
 }
 
 
