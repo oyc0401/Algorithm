@@ -1,9 +1,12 @@
 # algorithm
 
-### 백준 문제풀이 저장소
+### c++ 문제풀이 저장소
 
 [![Solved.ac 프로필](http://mazassumnida.wtf/api/v2/generate_badge?boj=oyc0401)](https://solved.ac/oyc0401)
 <img src="http://mazandi.herokuapp.com/api?handle=oyc0401&theme=warm"/>
+
+백준 프로필: https://www.acmicpc.net/user/oyc0401   
+프로그래머스 프로필: https://career.programmers.co.kr/pr/oyc0401_2481
 
 해결한 알고리즘들을 저장해요
 
@@ -17,6 +20,8 @@ cout << "Hello world";
 ``` python
 print("Hello world")
 ```
+파이썬 문제풀이 저장소: https://github.com/oyc0401/python
+
 3. dart (백준 미지원)
 ``` dart
 print("Hello world");
@@ -25,5 +30,6 @@ print("Hello world");
 -----
 
 링크  
-[baekjoon](https://www.acmicpc.net/user/oyc0401)  
-[solve.ac](https://solved.ac/profile/oyc0401)
+[baekjoon](https://www.acmicpc.net/user/oyc0401)    
+[solve.ac](https://solved.ac/profile/oyc0401)  
+[programmers](https://career.programmers.co.kr/pr/oyc0401_2481)
