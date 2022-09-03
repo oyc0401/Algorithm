@@ -5,74 +5,70 @@
 #include <queue>
 #include <cmath>
 #include <map>
+#include <sstream>
 #include <stack>
 #include <cassert>
 
+
 using namespace std;
 
-bool is_prime(long long int number) {
-    if(number==0||number==1){
-        return false;
-    }
+vector<string> split(string text, char div) {
+    istringstream ss(text);
+    string stringBuffer;
+    vector<string> vec;
+    vec.clear();
 
-    int sq = sqrt(number);
-    for (int i = 2; i <= sq; ++i) {
-        if (number % i == 0) {
-            return false;
-        }
+    // 자르기
+    while (getline(ss, stringBuffer, div)) {
+        vec.push_back(stringBuffer);
     }
-
-    return true;
+    return vec;
 }
 
-int solution(int n, int k){
-    stack<int> sta;
 
-    while (n != 0) {
-        int nod = n % k;
-        sta.push(nod);
-        n /= k;
+
+vector<int> solution(vector<string> id_list, vector<string> report, int k) {
+    vector<int> answer;
+    map<string, int> count;
+    vector<string> bad_list;
+    map<string, int> mail;
+
+
+    // 중복 제거
+    sort(report.begin(), report.end());
+    report.erase(unique(report.begin(),report.end()),report.end());
+
+    for (string id: report) {
+        vector<string> v = split(id, ' ');
+        count[v[1]]++;
     }
 
 
-    vector<int> vec;
-    while (!sta.empty()) {
-     ///  cout<<sta.top();
-        vec.push_back(sta.top());
-        sta.pop();
-    }
-   ///cout<<endl;
-
-    long long int num=0;
-    vector<long long int> list;
-
-    for (int ele: vec) {
-///cout<<num<<endl;
-        if (ele == 0) {
-            list.push_back(num);
-            num = 0;
-        } else {
-            num = num * 10 + ele;
+    for (pair<string,int> pa:count) {
+        if(pa.second>=k){
+            bad_list.push_back(pa.first);
         }
     }
-   /// cout<<num<<endl;
-   if(num!=0){
-       list.push_back(num);
-   }
 
-    int sum = 0;
-    for (long long int ele: list) {
-      ///  cout << ele << endl;
-        if (is_prime(ele)) {
-            sum++;
+    for (string id: report) {
+        vector<string> v = split(id, ' ');
+
+        for (string bad:bad_list) {
+            if(bad==v[1]){
+                mail[v[0]]++;
+            }
         }
-
     }
 
-    return sum;
+    for (string id:id_list) {
+        answer.push_back(mail[id]);
+    }
 
+
+
+
+    return answer;
 }
-
 
 // 1초: 1억번
 int main() {
@@ -80,16 +76,17 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
+    vector<string> id_list{"muzi", "frodo", "apeach", "neo"};
+    vector<string> report{"muzi frodo", "apeach frodo", "frodo neo", "muzi neo", "apeach muzi"};
+    int k = 2;
+    vector<int> vec = solution(id_list, report, k);
+    for (int n: vec) {
+        cout << n << " ";
+    }
 
 
-
-    int n, k;
-    cin >> n >> k;
-
-    cout<<solution(n,k);
 
 }
 // 437674 3
 
 // 859156 3
-
