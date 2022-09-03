@@ -10,6 +10,70 @@
 
 using namespace std;
 
+bool is_prime(long long int number) {
+    if(number==0||number==1){
+        return false;
+    }
+
+    int sq = sqrt(number);
+    for (int i = 2; i <= sq; ++i) {
+        if (number % i == 0) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int solution(int n, int k){
+    stack<int> sta;
+
+    while (n != 0) {
+        int nod = n % k;
+        sta.push(nod);
+        n /= k;
+    }
+
+
+    vector<int> vec;
+    while (!sta.empty()) {
+     ///  cout<<sta.top();
+        vec.push_back(sta.top());
+        sta.pop();
+    }
+   ///cout<<endl;
+
+    long long int num=0;
+    vector<long long int> list;
+
+    for (int ele: vec) {
+///cout<<num<<endl;
+        if (ele == 0) {
+            list.push_back(num);
+            num = 0;
+        } else {
+            num = num * 10 + ele;
+        }
+    }
+   /// cout<<num<<endl;
+   if(num!=0){
+       list.push_back(num);
+   }
+
+    int sum = 0;
+    for (long long int ele: list) {
+      ///  cout << ele << endl;
+        if (is_prime(ele)) {
+            sum++;
+        }
+
+    }
+
+    return sum;
+
+}
+
+
 // 1초: 1억번
 int main() {
     ios_base::sync_with_stdio(false);
@@ -17,54 +81,15 @@ int main() {
     cout.tie(NULL);
 
 
-    vector<int> vec[500];
 
 
-    int ind;
-    cin >> ind;
+    int n, k;
+    cin >> n >> k;
 
-    for (int i = 0; i < ind; ++i) {
-        for (int j = 0; j <= i; ++j) {
-            //cout<<i<<", "<<j<<endl;
-            int a;
-            cin >> a;
-            vec[i].push_back(a);
-        }
-    }
-//
-//    /// print
-//    for (int i = 0; i < ind; ++i) {
-//        for (int j = 0; j <= i; ++j) {
-//            cout << vec[i][j] << " ";
-//        }
-//        cout << endl;
-//    }
-
-
-    for (int i = ind - 2; i >= 0; --i) {
-       // cout << i << endl;
-
-        for (int j = 0; j < i+1 ; ++j) {
-            int front = vec[i + 1][j];
-            int back = vec[i + 1][j + 1];
-            //cout<<i<<", "<<j<<", "<<front<<endl;
-            //vec[i][j] += front;
-            vec[i][j] += front > back ? front : back;
-        }
-    }
-
-
-//    /// print
-//    for (int i = 0; i < ind; ++i) {
-//        for (int j = 0; j <= i; ++j) {
-//            cout << vec[i][j] << " ";
-//        }
-//        cout << endl;
-//    }
-
-cout<<vec[0][0];
+    cout<<solution(n,k);
 
 }
+// 437674 3
 
-
+// 859156 3
 
