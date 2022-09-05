@@ -5,8 +5,10 @@
 #include <queue>
 #include <cmath>
 #include <map>
+#include <sstream>
 #include <stack>
 #include <cassert>
+
 
 using namespace std;
 
@@ -17,54 +19,57 @@ int main() {
     cout.tie(NULL);
 
 
-    vector<int> vec[500];
+    int arr[1001][1001];
+
+    string a, b;
+    cin >> a >> b;
 
 
-    int ind;
-    cin >> ind;
+    int size_a = a.length();
+    int size_b = b.length();
 
-    for (int i = 0; i < ind; ++i) {
-        for (int j = 0; j <= i; ++j) {
-            //cout<<i<<", "<<j<<endl;
-            int a;
-            cin >> a;
-            vec[i].push_back(a);
+    for (int i = 0; i < size_a; ++i) {
+        for (int j = 0; j < size_b; ++j) {
+            if (a[i] == b[j]) {
+                arr[i + 1][j + 1] = arr[i][j] + 1;
+            } else {
+                arr[i + 1][j + 1] = arr[i][j + 1] > arr[i + 1][j] ? arr[i][j + 1] : arr[i + 1][j];
+            }
         }
     }
-//
+
+    //find big
+    int big=0;
+    for (int i = 0; i <=size_a; ++i) {
+        for (int j = 0; j <= size_b; ++j) {
+            //cout << arr[i][j] << " ";
+            if(big<arr[i][j]){
+                big=arr[i][j];
+            }
+        }
+
+    }
+
+
+
+
+
 //    /// print
-//    for (int i = 0; i < ind; ++i) {
-//        for (int j = 0; j <= i; ++j) {
-//            cout << vec[i][j] << " ";
+//    for (int i = 0; i <=size_a; ++i) {
+//        for (int j = 0; j <= size_b; ++j) {
+//            cout << arr[i][j] << " ";
 //        }
 //        cout << endl;
 //    }
 
+    cout<<big;
 
-    for (int i = ind - 2; i >= 0; --i) {
-       // cout << i << endl;
-
-        for (int j = 0; j < i+1 ; ++j) {
-            int front = vec[i + 1][j];
-            int back = vec[i + 1][j + 1];
-            //cout<<i<<", "<<j<<", "<<front<<endl;
-            //vec[i][j] += front;
-            vec[i][j] += front > back ? front : back;
-        }
-    }
-
-
-//    /// print
-//    for (int i = 0; i < ind; ++i) {
-//        for (int j = 0; j <= i; ++j) {
-//            cout << vec[i][j] << " ";
-//        }
-//        cout << endl;
-//    }
-
-cout<<vec[0][0];
 
 }
+// 437674 3
+
+// 859156 3
 
 
-
+//ACAYKP
+//CAPCA
