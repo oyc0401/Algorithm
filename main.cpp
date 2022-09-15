@@ -18,58 +18,24 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
+int a,b;
+cin>>a>>b;
 
-    int arr[1001][1001];
+map<string,string> myMap;
 
-    string a, b;
-    cin >> a >> b;
+    for (int i = 0; i < a; ++i) {
 
+        string email,password;
+        cin>>email>>password;
 
-    int size_a = a.length();
-    int size_b = b.length();
-
-    for (int i = 0; i < size_a; ++i) {
-        for (int j = 0; j < size_b; ++j) {
-            if (a[i] == b[j]) {
-                arr[i + 1][j + 1] = arr[i][j] + 1;
-            } else {
-                arr[i + 1][j + 1] = arr[i][j + 1] > arr[i + 1][j] ? arr[i][j + 1] : arr[i + 1][j];
-            }
-        }
+        myMap[email]=password;
     }
 
-    //find big
-    int big=0;
-    for (int i = 0; i <=size_a; ++i) {
-        for (int j = 0; j <= size_b; ++j) {
-            //cout << arr[i][j] << " ";
-            if(big<arr[i][j]){
-                big=arr[i][j];
-            }
-        }
-
+    for (int i = 0; i < b; ++i) {
+        string email;
+        cin>>email;
+        cout<<myMap[email]<<'\n';
     }
-
-
-
-
-
-//    /// print
-//    for (int i = 0; i <=size_a; ++i) {
-//        for (int j = 0; j <= size_b; ++j) {
-//            cout << arr[i][j] << " ";
-//        }
-//        cout << endl;
-//    }
-
-    cout<<big;
 
 
 }
-// 437674 3
-
-// 859156 3
-
-
-//ACAYKP
-//CAPCA
