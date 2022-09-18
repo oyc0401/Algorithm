@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include <algorithm>
 #include <set>
 #include <queue>
@@ -9,8 +8,40 @@
 #include <stack>
 #include <cassert>
 
-
 using namespace std;
+
+class Child {
+public:
+    void set(string left, string right) {
+        this->left = left;
+        this->right = right;
+    }
+
+//private:
+    string left, right;
+};
+
+map<string, Child> myMap;
+
+void front(string id) {
+    cout << id;
+    if (myMap[id].left != ".") front(myMap[id].left);
+    if (myMap[id].right != ".") front(myMap[id].right);
+
+}
+
+void middle(string id) {
+    if (myMap[id].left != ".") middle(myMap[id].left);
+    cout << id;
+    if (myMap[id].right != ".") middle(myMap[id].right);
+
+}
+
+void back(string id) {
+    if (myMap[id].left != ".") back(myMap[id].left);
+    if (myMap[id].right != ".") back(myMap[id].right);
+    cout << id;
+}
 
 // 1초: 1억번
 int main() {
@@ -18,24 +49,21 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-int a,b;
-cin>>a>>b;
-
-map<string,string> myMap;
-
-    for (int i = 0; i < a; ++i) {
-
-        string email,password;
-        cin>>email>>password;
-
-        myMap[email]=password;
+    int idx;
+    cin >> idx;
+    for (int i = 0; i < idx; ++i) {
+        string a, b, c;
+        cin >> a >> b >> c;
+        Child child{};
+        child.set(b, c);
+        myMap[a] = child;
     }
 
-    for (int i = 0; i < b; ++i) {
-        string email;
-        cin>>email;
-        cout<<myMap[email]<<'\n';
-    }
+    front("A");
+    cout << endl;
+    middle("A");
+    cout << endl;
+    back("A");
 
 
 }
