@@ -1,4 +1,4 @@
-# algorithm
+# Algorithm
 
 ### c++ 문제풀이 저장소
 
