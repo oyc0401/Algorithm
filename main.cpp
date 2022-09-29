@@ -10,83 +10,55 @@
 
 using namespace std;
 
-//queue<int> que;
-int idx;
-vector<int> inOrder;
-vector<int> preOrder;
-
-void check(int start, int INSTART, int lenght) {
-
-
-    if (lenght == 0) {
-        return;
-    } else if (lenght == 1) {
-      //  que.push(preOrder[start]);
-        cout<<preOrder[start]<<' ';
-        ///    cout<<"큐: "<<preOrder[start]<<endl;
-        return;
-    }
-
-    /// cout << start << ", " << lenght << " / " << INSTART << ", " << lenght << endl;
-    int lastNumber = preOrder[start + lenght - 1];
-    ///  cout << "lastNumber: " << lastNumber << endl;
-    //que.push(lastNumber);
-    cout<<lastNumber<<' ';
-
-    int findLast;
-    for (int i = INSTART; i < INSTART+lenght; ++i) {
-        if (lastNumber == inOrder[i]) {
-            ///    cout << "findLast: " << i << endl;
-            findLast = i;
-        }
-    }
-
-    int leftNum = findLast - INSTART;
-    ///  cout << "left num: " << leftNum << endl;
-    int rightNum = lenght - 1 - leftNum;
-    ///   cout << "right num: " << rightNum << endl;
-
-    ///  cout << start << ", " << leftNum << " / " << INSTART << ", " << leftNum << endl;
-    ///  cout << start + leftNum << ", " << rightNum << " / " << INSTART + leftNum + 1 << ", " << rightNum << endl<<endl;
-    check(start, INSTART, leftNum);
-    check(start + leftNum, INSTART + leftNum + 1, rightNum);
-
-
-}
-
 // 1초: 1억번
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 
-
+    int idx;
     cin >> idx;
-
-
     for (int i = 0; i < idx; ++i) {
-        int a;
-        cin >> a;
-        inOrder.push_back(a);
+        int Ax, Ay, Bx, By, d1, d2;
+        cin >> Ax >> Ay >> d1 >> Bx >> By >> d2;
+
+        int a = Ax - Bx;
+        int b = Ay - By;
+        int bitween = (a * a + b * b);
+
+        int big = d1 > d2 ? d1 : d2;
+        int small = d1 < d2 ? d1 : d2;
+
+        int sum = big * big + 2 * big * small + small * small;
+        int minus = big * big - 2 * big * small + small * small;
+
+//        cout << bitween << ", " << a << ", " << b << endl;
+//        cout << bitween << ", " << big << ", " << small << endl;
+//        cout << bitween << ", " << sum << ", " << minus << endl;
+
+        if (Ax == Bx && Ay == By && d1 == d2) {
+            cout << -1 << '\n';
+        } else if (bitween == sum || bitween == minus) {
+            cout << 1 << '\n';
+        } else if (minus < bitween && bitween < sum) {
+            cout << 2 << '\n';
+        } else {
+            cout << 0 << '\n';
+        }
     }
-    for (int i = 0; i < idx; ++i) {
-        int a;
-        cin >> a;
-        preOrder.push_back(a);
-    }
-
-    check(0, 0, preOrder.size());
 
 
-    // cout << "que:\n";
-//    while (!que.empty()) {
-//        cout << que.front() << " ";
-//        que.pop();
-//    }
+//    if ((a * a + b * b) < (d1 * d1 + d2 * d2))
 
 
 }
+//3
+//0 0 13 40 0 37
+//0 0 3 0 7 4
+//1 1 1 1 1 5
+//0 0 2 0 0 2
+//0 0 2 0 0 4
+//0 0 7 0 4 3
+//0 0 7 0 4 4
+//4 3 5 12 9 5
 
-// 7
-// 1 3 5 2 4 6 7
-// 1 5 2 3 7 6 4
