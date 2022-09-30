@@ -1,14 +1,21 @@
+
 #include <iostream>
+
 #include <algorithm>
 #include <set>
 #include <queue>
 #include <cmath>
 #include <map>
-#include <sstream>
-#include <stack>
 #include <cassert>
 
 using namespace std;
+
+class Point {
+public:
+    int x;
+    int y;
+    int h;
+};
 
 // 1초: 1억번
 int main() {
@@ -16,49 +23,157 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int idx;
-    cin >> idx;
-    for (int i = 0; i < idx; ++i) {
-        int Ax, Ay, Bx, By, d1, d2;
-        cin >> Ax >> Ay >> d1 >> Bx >> By >> d2;
+    int x, y, h;
+    cin >> x >> y >> h;
 
-        int a = Ax - Bx;
-        int b = Ay - By;
-        int bitween = (a * a + b * b);
 
-        int big = d1 > d2 ? d1 : d2;
-        int small = d1 < d2 ? d1 : d2;
-
-        int sum = big * big + 2 * big * small + small * small;
-        int minus = big * big - 2 * big * small + small * small;
-
-//        cout << bitween << ", " << a << ", " << b << endl;
-//        cout << bitween << ", " << big << ", " << small << endl;
-//        cout << bitween << ", " << sum << ", " << minus << endl;
-
-        if (Ax == Bx && Ay == By && d1 == d2) {
-            cout << -1 << '\n';
-        } else if (bitween == sum || bitween == minus) {
-            cout << 1 << '\n';
-        } else if (minus < bitween && bitween < sum) {
-            cout << 2 << '\n';
-        } else {
-            cout << 0 << '\n';
+    int ***arr = new int **[h];
+    for (int i = 0; i < h; i++) {
+        arr[i] = new int *[y];
+        for (int j = 0; j < y; ++j) {
+            arr[i][j] = new int [x];
         }
     }
 
 
-//    if ((a * a + b * b) < (d1 * d1 + d2 * d2))
+
+    queue<Point> que;
+    for (int k = 0; k < h; ++k) {
+        for (int i = 0; i < y; ++i) {
+            for (int j = 0; j < x; ++j) {
+                int a;
+                cin >> a;
+                arr[k][i][j] = a;
+                if (a == 1) {
+                    Point point;
+                    point.h = k;
+                    point.y = i;
+                    point.x = j;
+                    que.push(point);
+                }
+            }
+        }
+    }
 
 
+    int sum = 0;
+
+    while (!que.empty()) {
+        int size = que.size();
+        bool isChanged = false;
+
+        for (int i = 0; i < size; ++i) {
+            Point pa = que.front();
+            que.pop();
+            const int X = pa.x;
+            const int Y = pa.y;
+            const int H = pa.h;
+
+            // cout<<"i: "<<i<<", x: "<<X<<", y: "<<Y<<", sum: "<<sum<<endl;
+            //cout << "sum: " << sum << ", x: " << X << ", y: " << Y << endl;
+            // 왼쪽
+            if (X > 0 && arr[H][Y][X - 1] == 0) {
+                arr[H][Y][X - 1] = 1;
+                Point tuple;
+                tuple.h = H;
+                tuple.x = X - 1;
+                tuple.y = Y;
+
+                que.push(tuple);
+                isChanged = true;
+            }
+            // 오른쪽
+            if (X < x - 1 && arr[H][Y][X + 1] == 0) {
+                arr[H][Y][X + 1] = 1;
+                Point tuple;
+                tuple.h = H;
+                tuple.x = X + 1;
+                tuple.y = Y;
+                que.push(tuple);
+                isChanged = true;
+            }
+            // 위쪽
+            if (Y > 0 && arr[H][Y - 1][X] == 0) {
+                arr[H][Y - 1][X] = 1;
+                Point tuple;
+                tuple.h = H;
+                tuple.x = X;
+                tuple.y = Y - 1;
+                que.push(tuple);
+                isChanged = true;
+            }
+            // 아래쪽
+            if (Y < y - 1 && arr[H][Y + 1][X] == 0) {
+                arr[H][Y + 1][X] = 1;
+                Point tuple;
+                tuple.h = H;
+                tuple.x = X;
+                tuple.y = Y + 1;
+                que.push(tuple);
+                isChanged = true;
+            }
+            // 천장
+            if (H > 0 && arr[H - 1][Y][X] == 0) {
+                arr[H - 1][Y][X] = 1;
+                Point tuple;
+                tuple.h = H - 1;
+                tuple.x = X;
+                tuple.y = Y;
+                que.push(tuple);
+                isChanged = true;
+            }
+            // 바닥
+            if (H < h - 1 && arr[H + 1][Y][X] == 0) {
+                arr[H + 1][Y][X] = 1;
+                Point tuple;
+                tuple.h = H + 1;
+                tuple.x = X;
+                tuple.y = Y;
+                que.push(tuple);
+                isChanged = true;
+            }
+        }
+
+        if (isChanged) {
+            sum++;
+        }
+
+
+
+//        /// print
+//        for (int k = 0; k < h; ++k) {
+//            for (int i = 0; i < y; ++i) {
+//                for (int j = 0; j < x; ++j) {
+//                    cout << arr[k][i][j] << " ";
+//                }
+//                cout << endl;
+//            }
+//        }
+//
+//        /// print
+
+
+    }
+
+    bool complete = true;
+    for (int k = 0; k < h; ++k) {
+        for (int i = 0; i < y; ++i) {
+            for (int j = 0; j < x; ++j) {
+                if (arr[k][i][j] == 0) {
+                    complete = false;
+                }
+            }
+        }
+    }
+
+
+    if (complete) {
+        cout << sum;
+    } else {
+        cout << -1;
+    }
+
+    return 0;
 }
-//3
-//0 0 13 40 0 37
-//0 0 3 0 7 4
-//1 1 1 1 1 5
-//0 0 2 0 0 2
-//0 0 2 0 0 4
-//0 0 7 0 4 3
-//0 0 7 0 4 4
-//4 3 5 12 9 5
+
 
