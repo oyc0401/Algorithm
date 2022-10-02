@@ -12,6 +12,7 @@
 ---------------------
 ##### 2022.09.15 백준 골드III
 ##### 2022.09.24 2023 KAKAO BLIND RECRUITMENT 3솔
+##### 2022.10.01 2022 IGRUS Newbie Programming Contest 2위
 
 
 
