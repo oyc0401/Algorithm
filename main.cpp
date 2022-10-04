@@ -15,81 +15,74 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    cout << fixed << setprecision(8);
 
-    int len, index;
+    int num;
+    cin >> num;
 
-    vector<int> vecX;
-    vector<int> vecY;
+    string *arr = new string[num];
 
-    cin >> len >> index;
 
-    for (int i = 0; i < len; ++i) {
-        int a;
-        cin >> a;
-        vecX.push_back(a);
-    }
-    for (int i = 0; i < len; ++i) {
-        int b;
-        cin >> b;
-        vecY.push_back(b);
+    for (int i = 0; i < num; ++i) {
+        cin >> arr[i];
     }
 
-    vector<double> heL{0};
-    vector<double> heR{0};
-
-    double lastL = 0;
-    double lastR = 0;
-
-    for (int i = 0; i < len - 1; ++i) {
-        long long int X = vecX[i + 1] - vecX[i];
-        long long int Y = vecY[i + 1] - vecY[i];
-
-        long long int XY = X * X + Y * Y;
-        double dist = sqrt(XY);
-
-        if (Y > 0) {
-            heL.push_back(lastL + dist * 3);
-            heR.push_back(lastR + dist);
-            lastL += dist * 3;
-            lastR += dist;
-        } else if (Y == 0) {
-            heL.push_back(lastL + dist * 2);
-            heR.push_back(lastR + dist * 2);
-            lastL += dist * 2;
-            lastR += dist * 2;
-        } else {
-            heL.push_back(lastL + dist);
-            heR.push_back(lastR + dist * 3);
-            lastL += dist;
-            lastR += dist * 3;
-        }
-
-
-    }
-
-//    for (double d: heL) {
-//        cout << d << " ";
+//    ///print
+//    for (int i = 0; i < num; ++i) {
+//        cout << arr[i];
+//        cout << endl;
 //    }
-//    cout << endl;
-//    for (double d: heR) {
-//        cout << d << " ";
-//    }
-//    cout << endl;
 
+    queue<pair<int, int>> que;
 
+    vector<int> vec;
 
-    for (int i = 0; i < index; ++i) {
-        int start, finish;
-        cin >> start >> finish;
-        if (start < finish) {
-            cout << heL[finish - 1] - heL[start - 1] << '\n';
-        } else {
-            cout << heR[start - 1] - heR[finish - 1] << '\n';
+    for (int i = 0; i < num; ++i) {
+        for (int j = 0; j < num; ++j) {
+            if (arr[i][j] == '1') {
+                int sum = 0;
+
+                que.push(make_pair(i, j));
+                arr[i][j]='0';
+                sum++;
+                while (!que.empty()) {
+
+                    int x = que.front().first;
+                    int y = que.front().second;
+                    if (0 < x && arr[x - 1][y] == '1') {
+                        que.push(make_pair(x - 1, y));
+                        arr[x - 1][y] = '0';
+                        sum++;
+                    }
+                    if (x < num - 1 && arr[x + 1][y] == '1') {
+                        que.push(make_pair(x + 1, y));
+                        arr[x + 1][y] = '0';
+                        sum++;
+                    }
+                    if (0 < y && arr[x][y - 1] == '1') {
+                        que.push(make_pair(x, y - 1));
+                        arr[x][y - 1] = '0';
+                        sum++;
+                    }
+                    if (y < num - 1 && arr[x][y + 1] == '1') {
+                        que.push(make_pair(x, y + 1));
+                        arr[x][y + 1] = '0';
+                        sum++;
+                    }
+
+                    que.pop();
+
+                }
+                vec.push_back(sum);
+            }
         }
-
-
     }
+
+    std::sort(vec.begin(), vec.end());
+    cout << vec.size() << '\n';
+    for (int n: vec) {
+        cout << n << '\n';
+    }
+
 
     return 0;
 }
