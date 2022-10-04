@@ -16,6 +16,9 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
+    int dx[4] = {1, -1, 0, 0};
+    int dy[4] = {0, 0, 1, -1};
+
     int num;
     cin >> num;
 
@@ -26,11 +29,6 @@ int main() {
         cin >> arr[i];
     }
 
-//    ///print
-//    for (int i = 0; i < num; ++i) {
-//        cout << arr[i];
-//        cout << endl;
-//    }
 
     queue<pair<int, int>> que;
 
@@ -42,33 +40,22 @@ int main() {
                 int sum = 0;
 
                 que.push(make_pair(i, j));
-                arr[i][j]='0';
+                arr[i][j] = '0';
                 sum++;
+
                 while (!que.empty()) {
-
-                    int x = que.front().first;
-                    int y = que.front().second;
-                    if (0 < x && arr[x - 1][y] == '1') {
-                        que.push(make_pair(x - 1, y));
-                        arr[x - 1][y] = '0';
-                        sum++;
+                    int a = que.front().first;
+                    int b = que.front().second;
+                    for (int k = 0; k < 4; ++k) {
+                        int nx = a + dx[k];
+                        int ny = b + dy[k];
+                        if (0 <= nx && 0 <= ny && nx < num && ny < num
+                            && arr[nx][ny] == '1') {
+                            que.push(make_pair(nx, ny));
+                            arr[nx][ny] = '0';
+                            sum++;
+                        }
                     }
-                    if (x < num - 1 && arr[x + 1][y] == '1') {
-                        que.push(make_pair(x + 1, y));
-                        arr[x + 1][y] = '0';
-                        sum++;
-                    }
-                    if (0 < y && arr[x][y - 1] == '1') {
-                        que.push(make_pair(x, y - 1));
-                        arr[x][y - 1] = '0';
-                        sum++;
-                    }
-                    if (y < num - 1 && arr[x][y + 1] == '1') {
-                        que.push(make_pair(x, y + 1));
-                        arr[x][y + 1] = '0';
-                        sum++;
-                    }
-
                     que.pop();
 
                 }
