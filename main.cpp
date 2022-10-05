@@ -9,6 +9,39 @@
 #include <cassert>
 
 using namespace std;
+int **arr;
+int mi = 0;
+int ze = 0;
+int one = 0;
+
+void check(int x, int y, int size) {
+    int first = arr[x][y];
+    // cout << x << ", " << y << ", " << size << endl;
+    for (int i = x; i < size + x; ++i) {
+        for (int j = y; j < size + y; ++j) {
+            if (arr[i][j] != first) {
+                int si = size / 3;
+                int a = x / 3;
+                int b = y / 3;
+                for (int k = 0; k < 3; ++k) {
+                    for (int l = 0; l < 3; ++l) {
+                        check(x + si * k, y + si * l, si);
+                    }
+                }
+                return;
+            }
+        }
+    }
+
+    if (first == -1) {
+        mi++;
+    } else if (first == 0) {
+        ze++;
+    } else if (first == 1) {
+        one++;
+    }
+
+}
 
 // 1초: 1억번
 int main() {
@@ -16,59 +49,25 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int dx[4] = {1, -1, 0, 0};
-    int dy[4] = {0, 0, 1, -1};
+    int index;
+    cin >> index;
 
-    int num;
-    cin >> num;
-
-    string *arr = new string[num];
-
-
-    for (int i = 0; i < num; ++i) {
-        cin >> arr[i];
+    arr = new int *[index];
+    for (int i = 0; i < index; ++i) {
+        arr[i] = new int[index];
     }
 
-
-    queue<pair<int, int>> que;
-
-    vector<int> vec;
-
-    for (int i = 0; i < num; ++i) {
-        for (int j = 0; j < num; ++j) {
-            if (arr[i][j] == '1') {
-                int sum = 0;
-
-                que.push(make_pair(i, j));
-                arr[i][j] = '0';
-                sum++;
-
-                while (!que.empty()) {
-                    int a = que.front().first;
-                    int b = que.front().second;
-                    for (int k = 0; k < 4; ++k) {
-                        int nx = a + dx[k];
-                        int ny = b + dy[k];
-                        if (0 <= nx && 0 <= ny && nx < num && ny < num
-                            && arr[nx][ny] == '1') {
-                            que.push(make_pair(nx, ny));
-                            arr[nx][ny] = '0';
-                            sum++;
-                        }
-                    }
-                    que.pop();
-
-                }
-                vec.push_back(sum);
-            }
+    for (int i = 0; i < index; ++i) {
+        for (int j = 0; j < index; ++j) {
+            cin >> arr[i][j];
         }
     }
 
-    std::sort(vec.begin(), vec.end());
-    cout << vec.size() << '\n';
-    for (int n: vec) {
-        cout << n << '\n';
-    }
+    check(0, 0, index);
+
+    cout << mi << endl;
+    cout << ze << endl;
+    cout << one;
 
 
     return 0;
