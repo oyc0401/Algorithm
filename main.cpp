@@ -7,41 +7,43 @@
 #include <cmath>
 #include <map>
 #include <cassert>
+#include <sstream>
 
 using namespace std;
-int **arr;
-int mi = 0;
-int ze = 0;
-int one = 0;
 
-void check(int x, int y, int size) {
-    int first = arr[x][y];
-    // cout << x << ", " << y << ", " << size << endl;
-    for (int i = x; i < size + x; ++i) {
-        for (int j = y; j < size + y; ++j) {
-            if (arr[i][j] != first) {
-                int si = size / 3;
-                int a = x / 3;
-                int b = y / 3;
-                for (int k = 0; k < 3; ++k) {
-                    for (int l = 0; l < 3; ++l) {
-                        check(x + si * k, y + si * l, si);
-                    }
-                }
-                return;
-            }
-        }
+int plusNum = 0;
+int minusNum = 0;
+
+vector<string> plusSplit(string text, char div) {
+    istringstream ss(text);
+    string stringBuffer;
+    vector<string> vec;
+    vec.clear();
+
+    // 자르기
+    while (getline(ss, stringBuffer, div)) {
+        vec.push_back(stringBuffer);
+        plusNum++;
     }
-
-    if (first == -1) {
-        mi++;
-    } else if (first == 0) {
-        ze++;
-    } else if (first == 1) {
-        one++;
-    }
-
+    plusNum--;
+    return vec;
 }
+
+vector<string> minusSplit(string text, char div) {
+    istringstream ss(text);
+    string stringBuffer;
+    vector<string> vec;
+    vec.clear();
+
+    // 자르기
+    while (getline(ss, stringBuffer, div)) {
+        vec.push_back(stringBuffer);
+        minusNum++;
+    }
+    minusNum--;
+    return vec;
+}
+
 
 // 1초: 1억번
 int main() {
@@ -49,26 +51,40 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int index;
-    cin >> index;
+    string text;
+    cin >> text;
 
-    arr = new int *[index];
-    for (int i = 0; i < index; ++i) {
-        arr[i] = new int[index];
-    }
+    vector<string> vec = plusSplit(text, '-');
 
-    for (int i = 0; i < index; ++i) {
-        for (int j = 0; j < index; ++j) {
-            cin >> arr[i][j];
+
+    int sum = 0;
+
+    bool first = true;
+    for (string t: vec) {
+
+
+        int plus = 0;
+        vector<string> vecPlus = minusSplit(t, '+');
+        for (string n: vecPlus) {
+            int num = stoi(n);
+            plus += num;
         }
+
+        if (first) {
+            sum += plus;
+            first = false;
+        } else {
+            sum -= plus;
+        }
+
+        //cout << plus << endl;
+
+
     }
 
-    check(0, 0, index);
 
-    cout << mi << endl;
-    cout << ze << endl;
-    cout << one;
-
+    //cout<<"답: "<<sum<<endl;
+    cout << sum;
 
     return 0;
 }
