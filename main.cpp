@@ -7,43 +7,8 @@
 #include <cmath>
 #include <map>
 #include <cassert>
-#include <sstream>
 
 using namespace std;
-
-int plusNum = 0;
-int minusNum = 0;
-
-vector<string> plusSplit(string text, char div) {
-    istringstream ss(text);
-    string stringBuffer;
-    vector<string> vec;
-    vec.clear();
-
-    // 자르기
-    while (getline(ss, stringBuffer, div)) {
-        vec.push_back(stringBuffer);
-        plusNum++;
-    }
-    plusNum--;
-    return vec;
-}
-
-vector<string> minusSplit(string text, char div) {
-    istringstream ss(text);
-    string stringBuffer;
-    vector<string> vec;
-    vec.clear();
-
-    // 자르기
-    while (getline(ss, stringBuffer, div)) {
-        vec.push_back(stringBuffer);
-        minusNum++;
-    }
-    minusNum--;
-    return vec;
-}
-
 
 // 1초: 1억번
 int main() {
@@ -51,40 +16,77 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    string text;
-    cin >> text;
+    int dx[8] = {1, -1, 0, 0,1,1,-1,-1};
+    int dy[8] = {0, 0, 1, -1,1,-1,1,-1};
 
-    vector<string> vec = plusSplit(text, '-');
+    int x, y;
+    cin >> x >> y;
 
-
-    int sum = 0;
-
-    bool first = true;
-    for (string t: vec) {
+    while (x != 0 || y != 0) {
 
 
-        int plus = 0;
-        vector<string> vecPlus = minusSplit(t, '+');
-        for (string n: vecPlus) {
-            int num = stoi(n);
-            plus += num;
+        int **arr = new int *[y];
+        for (int i = 0; i < y; ++i) {
+            arr[i] = new int[x];
         }
 
-        if (first) {
-            sum += plus;
-            first = false;
-        } else {
-            sum -= plus;
+        for (int i = 0; i < y; ++i) {
+            for (int j = 0; j < x; ++j) {
+                cin >> arr[i][j];
+            }
         }
 
-        //cout << plus << endl;
+//    /// print
+//    for (int i = 0; i < y; ++i) {
+//        for (int j = 0; j < x; ++j) {
+//            cout << arr[i][j] << " ";
+//        }
+//        cout << '\n';
+//    }
+//    cout << '\n';
+//    /// print
 
 
+        // bool visted[9][9];
+        queue<pair<int, int>> que;
+
+
+        int sum = 0;
+        for (int i = 0; i < y; ++i) {
+            for (int j = 0; j < x; ++j) {
+                if (arr[i][j] == 1) {
+                    sum++;
+                    //cout<<": "<<j<<", "<<i<<endl;
+
+                    que.push(make_pair(j, i));
+                    arr[i][j] = 0;
+                    while (!que.empty()) {
+                        int a = que.front().first;
+                        int b = que.front().second;
+                        for (int k = 0; k < 8; ++k) {
+                            int nx = a + dx[k];
+                            int ny = b + dy[k];
+                           // cout<<"??: "<<a<<", "<<b<<endl;
+                            //cout<<"n: "<<nx<<", "<<ny<<endl;
+                            if (0 <= nx && 0 <= ny && nx < x && ny < y
+                                && arr[ny][nx] == 1) {
+
+                                que.push(make_pair(nx, ny));
+                                arr[ny][nx] = 0;
+                            }
+                        }
+                        que.pop();
+
+                    }
+
+                }
+            }
+        }
+
+        cout << sum<<'\n';
+        cin >> x >> y;
     }
 
-
-    //cout<<"답: "<<sum<<endl;
-    cout << sum;
 
     return 0;
 }
