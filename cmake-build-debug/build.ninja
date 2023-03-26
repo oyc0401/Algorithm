@@ -51,7 +51,7 @@ build cmake_object_order_depends_target_vacation: phony || CMakeFiles/vacation.d
 
 build CMakeFiles/vacation.dir/main.cpp.o: CXX_COMPILER__vacation_Debug /Users/oyuchan/CLionProjects/algorithm/main.cpp || cmake_object_order_depends_target_vacation
   DEP_FILE = CMakeFiles/vacation.dir/main.cpp.o.d
-  FLAGS = -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -std=gnu++14
+  FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk -std=gnu++14
   OBJECT_DIR = CMakeFiles/vacation.dir
   OBJECT_FILE_DIR = CMakeFiles/vacation.dir
   TARGET_COMPILE_PDB = CMakeFiles/vacation.dir/
@@ -66,7 +66,7 @@ build CMakeFiles/vacation.dir/main.cpp.o: CXX_COMPILER__vacation_Debug /Users/oy
 # Link the executable vacation
 
 build vacation: CXX_EXECUTABLE_LINKER__vacation_Debug CMakeFiles/vacation.dir/main.cpp.o
-  FLAGS = -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk
+  FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk
   OBJECT_DIR = CMakeFiles/vacation.dir
   POST_BUILD = :
   PRE_LINK = :
