@@ -1,6 +1,5 @@
-
 #include <iostream>
-#include <iomanip>
+
 #include <algorithm>
 #include <set>
 #include <queue>
@@ -10,150 +9,98 @@
 
 using namespace std;
 
-int INF = 100000000;
+vector<int> myVec;
 
-class Node {
-public:
-    Node(int n, int w) : node(n), weight(w) {}
+int lastIdx(int target) {
+    int size = myVec.size();
+    int left = 0;
+    int right = size - 1;
 
-    int node;
-    int weight;
-};
+    while (left <= right) {
 
+        int mid = left + (right - left) / 2;
+
+//        cout << left << ", " << mid << ", " << right << endl;
+
+        if (myVec[mid] > target) {
+            // 다운
+            right = mid - 1;
+        } else if (myVec[mid] < target) {
+            // 업
+            left = mid + 1;
+        } else {
+            left = mid;
+            break;
+        }
+    }
+
+//    cout<<"리턴: "<<left<<endl;
+    return left;
+}
+// 0 9
+// 1 3 6 8 10 13 17 18 20
+
+int minNum = -1'000'000'001;
+
+// 1000000000000000000
 // 1초: 1억번
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int count, lenght;
-    cin >> count >> lenght;
 
-    // arr
-    int **arr = new int *[count];
-    for (int i = 0; i < count; ++i) {
-        arr[i] = new int[count];
+    int idx;
+    cin >> idx;
+    queue<int> que;
+
+    myVec.push_back(minNum);
+
+    for (int i = 0; i < idx; ++i) {
+        int a;
+        cin >> a;
+        que.push(a);
     }
 
-    for (int i = 0; i < count; ++i) {
-        for (int j = 0; j < count; ++j) {
-            arr[i][j] = INF;
-        }
-        arr[i][i] = 0;
-    }
+    while (!que.empty()) {
 
-    // graph
-    int **graph = new int *[count];
-    for (int i = 0; i < count; ++i) {
-        graph[i] = new int[count];
-    }
+        /// cout<<qu.front()<<":\n";
 
-    for (int i = 0; i < count; ++i) {
-        for (int j = 0; j < count; ++j) {
-            graph[i][j] = 0;
-        }
-    }
+        int cur = que.front();
+        int last = lastIdx(cur);
+//        cout<<last<<endl;
 
-
-    for (int i = 0; i < lenght; ++i) {
-        int a, b, weight;
-        cin >> a >> b >> weight;
-        a--;
-        b--;
-        if (graph[a][b] == 0) {
-            graph[a][b] = weight;
-        } else if (graph[a][b] > weight) {
-            graph[a][b] = weight;
-        }
-        if (arr[a][b] > weight) {
-            arr[a][b] = weight;
+        if (myVec.size() <= last) {
+            myVec.push_back(que.front());
+        } else {
+            myVec[last] = que.front();
         }
 
 
-    }
 
-
-//    cout << "<노드>\n";
-//    for (int i = 0; i < count; ++i) {
-//        for (int j = 0; j < count; ++j) {
-//            cout << graph[i][j] << " ";
+//        /// print
+//        for (int i = 0; i < myVec.size(); ++i) {
+//            cout << "(" << i << ", " << myVec[i] << ") ";
 //        }
 //        cout << endl;
-//    }
-//
-//    cout << "<가중치>\n";
-//    for (int i = 0; i < count; ++i) {
-//        for (int j = 0; j < count; ++j) {
-//            if (arr[i][j] == INF) {
-//                cout << "INF" << " ";
-//            } else {
-//                cout << arr[i][j] << " ";
-//            }
-//        }
-//        cout << endl;
-//    }
-//
-//    cout << endl;
 
-
-    for (int focusNode = 0; focusNode < count; ++focusNode) {
-        for (int k = 0; k < count; ++k) {
-            for (int next = 0; next < count; ++next) {
-
-                // focusNode = 1, k = 3, next = 2
-                // 3 -> 1 로의 가중치 + 1 -> 2 로의 가중치가
-                int sum = arr[k][focusNode] + arr[focusNode][next];
-                // 3 -> 2 로의 가중치 보다 작으면
-                if (sum < arr[k][next]) {
-
-//                    cout << "가중치: " << k << "->" << focusNode << "->" << next << " = " << sum << " <-> "
-//                         << arr[k][next] << endl;
-                    arr[k][next] = sum;
-//                    for (int i = 0; i < count; ++i) {
-//                        for (int j = 0; j < count; ++j) {
-//                            if (arr[i][j] == INF) {
-//                                cout << "INF" << " ";
-//                            } else {
-//                                cout << arr[i][j] << " ";
-//                            }
-//                        }
-//                        cout << endl;
-//                    }
-//                    cout << endl;
-                } else {
-//                    cout << "작지않다: " << k << "->" << focusNode << "->" << next << " = " << sum << " <-> "
-//                         << arr[k][next] << endl;
-                }
-
-
-            }
-
-
-        }
+        que.pop();
 
     }
 
-//    cout << "<노드>\n";
-//    for (int i = 0; i < count; ++i) {
-//        for (int j = 0; j < count; ++j) {
-//            cout << graph[i][j] << " ";
-//        }
-//        cout << endl;
-//    }
-//
-//    cout << "<가중치>\n";
-    for (int i = 0; i < count; ++i) {
-        for (int j = 0; j < count; ++j) {
-            if (arr[i][j] == INF) {
-                cout << "0" << " ";
-            } else {
-                cout << arr[i][j] << " ";
-            }
-        }
-        cout << endl;
-    }
 
-    return 0;
+    cout << myVec.size() - 1 << endl;
+
+//    for (int n: myVec) {
+//        if (n != minNum) {
+//            cout << n << " ";
+//        }
+//
+//    }
+
 }
 
+//12
+//1 2 10 10 11 99 13 14 3 4 5 6
 
+/// 3 6 5 7 8 3 2 7 9 1 5 7 4 2 9 8 2 3 4 8 7 9
