@@ -10,106 +10,46 @@
 
 using namespace std;
 
+long long init(vector<long long> &arr, vector<long long> &tree, int node, int start, int end) {
+    if (start == end)    // 노드가 리프 노드인 경우
+        return tree[node] = arr[start];    // 배열의 그 원소를 가져야 함
 
-template<typename T>
-class LinkedListStack {
-private:
-    struct Node {
-        T data;
-        Node *next;
+    int mid = (start + end) / 2;
+//    cout << start << " " << mid << " " << end << endl;
 
-        Node(T d) : data(d), next(nullptr) {}
-    };
+    // 구간 합을 구하는 경우
+    return tree[node] = init(arr, tree, node * 2, start, mid) + init(arr, tree, node * 2 + 1, mid + 1, end);
 
-    Node *topNode;
-    int _size;
-
-public:
-    LinkedListStack() : topNode(nullptr) {
-        _size = 0;
-    }
-
-    void push(T data) {
-        Node *newNode = new Node(data);
-        newNode->next = topNode;
-        topNode = newNode;
-        _size++;
-    }
-
-    void pop() {
-        if (topNode == nullptr) {
-            std::cerr << "Stack underflow\n";
-            return;
-        }
-
-        Node *temp = topNode;
-        topNode = topNode->next;
-        delete temp;
-        _size--;
-    }
-
-    int size() { return _size; }
-
-    T top() const {
-        if (topNode == nullptr) {
-            std::cerr << "Stack underflow\n";
-            return T();
-        }
-
-        return topNode->data;
-    }
-
-    bool empty() const {
-        return topNode == nullptr;
-    }
-
-    ~LinkedListStack() {
-        while (topNode != nullptr) {
-            Node *temp = topNode;
-            topNode = topNode->next;
-            delete temp;
-        }
-    }
-};
-
-
-LinkedListStack<pair<int, int>> myVec[1000001];
-
-
-int myVecSize = 0;
-
-int lastIdx(int target) {
-    int size = myVecSize;
-    int left = 0;
-    int right = size - 1;
-
-    while (left <= right) {
-
-        int mid = left + (right - left) / 2;
-
-//        cout << left << ", " << mid << ", " << right << endl;
-
-        int midObject = myVec[mid].top().second;
-        if (midObject > target) {
-            // 다운
-            right = mid - 1;
-        } else if (midObject < target) {
-            // 업
-            left = mid + 1;
-        } else {
-            left = mid;
-            break;
-        }
-    }
-
-    return left;
+    // 구간의 최솟값을 구하는 경우도 비슷하게 해줄 수 있다.
+    // return tree[node] = min(init(arr, tree, node * 2, start, mid), init(arr, tree, node * 2 + 1, mid + 1, end));
 }
-// 0 9
-// 1 3 6 8 10 13 17 18 20
 
-int minNum = -2'000'000'000;
+long long sum(vector<long long> &tree, int node, int start, int end, int left, int right) {
+    // case 1: [start, end] 앞 뒤에 [left, right]가 있는 경우,
+    // 겹치지 않기 때문에 탐색을 더 이상 할 필요가 없다.
+    if (left > end || right < start) return 0;
+
+    // case 2: [start, end]가 [left, right]에 포함
+    if (left <= start && end <= right) return tree[node];
+
+    // case 3, 4: 왼쪽 자식과 오른쪽 자식을 루트로 하는 트리에서 다시 탐색 시작
+    int mid = (start + end) / 2;
+    return sum(tree, node * 2, start, mid, left, right) + sum(tree, node * 2 + 1, mid + 1, end, left, right);
+}
 
 
+void update(vector<long long> &tree, int node, int start, int end, int index, long long diff) {
+    if (index < start || index > end) return;    // case 2
+    tree[node] = tree[node] + diff;    // case 1
+
+    // 리프 노드가 아닌 경우 자식도 변경해줘야 하기 때문에,
+    // 리프 노드인지 검사를 하고 아래 자식 노드를 갱신해준다.
+    if (start != end) {
+        int mid = (start + end) / 2;
+        update(tree, node * 2, start, mid, index, diff);
+        update(tree, node * 2 + 1, mid + 1, end, index, diff);
+    }
+}
 
 // 1000000000000000000
 // 1초: 1억번
@@ -118,83 +58,48 @@ int main() {
 //    cin.tie(NULL);
 //    cout.tie(NULL);
 
+    int len, updateLen, sumLen;
+    cin >> len >> updateLen >> sumLen;
 
-    int idx;
-    cin >> idx;
-//    queue<int> que;
-    vector<int> vec;
-
-    myVec[0].push(make_pair(-1, minNum));
-    myVecSize++;
-
-    for (int i = 0; i < idx; ++i) {
-        int a;
-        cin >> a;
-        vec.push_back(a);
+    vector<long long> vec;
+    for (int i = 0; i < len; ++i) {
+        long long n;
+        cin >> n;
+        vec.push_back(n);
     }
 
 
-    int saveIdx = 1;
-//    vector<int> saveVec;
-    for (int i = 0; i < vec.size(); ++i) {
+    vector<long long> segTree(4 * len);
 
-        // cout<<que.front()<<":\n";
+    init(vec, segTree, 1, 0, len - 1);
 
-        int cur = vec[i];
-        int last = lastIdx(cur);
-
-        if (myVecSize <= last) {
-            myVec[myVecSize].push(make_pair(i, cur));
-            myVecSize++;
+//    for (long long n: segTree) {
+//        cout << n << " ";
+//    }
+//    cout << endl;
 
 
+    for (int i = 0; i < updateLen + sumLen; ++i) {
+        long long a, b, c;
+        cin >> a >> b >> c;
+        if (a == 1) {
+            // 업데이트
+            long long val = c;
+            int index = b - 1;
+            long long diff = val - vec[index];
+            vec[index] = val;
+            update(segTree, 1, 0, len - 1, index, diff);
 
-            saveIdx = i;
-        } else {
-            myVec[last].push(make_pair(i, cur));
+        } else if (a == 2) {
+            int left = b - 1;
+            int right = c - 1;
+            long long plus = sum(segTree, 1, 0, len - 1, left, right);
 
+            cout << plus << endl;
         }
-
-
-
-
-//
-        /// print
-        for (int k = 0; k < myVecSize; ++k) {
-            cout << "(" << k << ", " << myVec[k].top().second << ", " << myVec[k].size() << ") ";
-        }
-        cout << endl;
-
-    }
-
-
-//    cout << sizeof myVec[3] << endl;
-    cout << myVecSize - 1 << endl;
-
-
-    stack<int> printStack;
-
-    for (int i = myVecSize - 1; i > 0; --i) {
-
-        while (myVec[i].top().first > saveIdx) {
-            myVec[i].pop();
-        }
-        saveIdx = myVec[i].top().first;
-        if (myVec[i].top().second != minNum) {
-            printStack.push(myVec[i].top().second);
-        }
-    }
-
-    while (!printStack.empty()) {
-        cout << printStack.top() << " ";
-        printStack.pop();
     }
 
 
 }
-
-//14
-//1 2 10 10 11 4 99 13 14 5 6 7 3 3
-
-/// 3 6 5 7 8 3 2 7 9 1 5 7 4 2 9 8 2 3 4 8 7 9
-
+// 5
+// 1 2 3 4 5
