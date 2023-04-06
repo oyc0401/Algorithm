@@ -10,25 +10,78 @@
 
 using namespace std;
 
+//1,000,000,000
 class Node {
 public:
-
-    int a, b, w;
+    int x, y, z;
+    int id;
 
     void print() {
-        cout << a << " " << b << " " << w << endl;
-    }
+        cout << id << " (" << x << ", " << y << ", " << z << ")" << endl;
 
-    bool operator<(const Node &loc2) const {
-        return w > loc2.w;
+
     }
 };
 
+class Node2 {
+public:
+    Node *node;
+};
 
-bool compare(Node x, Node y) {
-    return x.w < y.w;
+
+class Edge {
+public:
+    int node[2];
+    int distance;
+
+    Edge(int a, int b, int distance) {
+        this->node[0] = a;
+        this->node[1] = b;
+        this->distance = distance;
+    }
+
+    bool operator<(Edge &edge) {
+        return this->distance < edge.distance;
+    }
+
+
+};
+
+bool compareE(Edge &edge1, Edge &edge2) {
+    return edge1.distance < edge2.distance;
 }
 
+bool compareX(Node2 a, Node2 b) {
+    return a.node->x < b.node->x;
+}
+
+bool compareY(Node2 a, Node2 b) {
+    return a.node->y < b.node->y;
+}
+
+bool compareZ(Node2 a, Node2 b) {
+    return a.node->z < b.node->z;
+}
+
+
+int getParent(int set[], int x) {
+    if (set[x] == x) return x;
+    return set[x] = getParent(set, set[x]);
+}
+
+void unionParent(int set[], int a, int b) {
+    a = getParent(set, a);
+    b = getParent(set, b);
+    if (a < b) set[b] = a;
+    else set[a] = b;
+}
+
+int find(int set[], int a, int b) {
+    a = getParent(set, a);
+    b = getParent(set, b);
+    if (a == b) return 1;
+    else return 0;
+}
 
 
 // 1000000000000000000
@@ -38,118 +91,124 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int T, edgeCount;
-    vector<vector<pair<int, int>>> nodeArr;
+
+    vector<Node2> xArr;
+    vector<Node2> yArr;
+    vector<Node2> zArr;
+
     long long sum = 0;
 
-    cin >> T >> edgeCount;
+    int nodeCnt;
+    cin >> nodeCnt;
 
-    int visited[T];
-    for (int i = 0; i < T; ++i) {
+    int visited[nodeCnt];
+    for (int i = 0; i < nodeCnt; ++i) {
         visited[i] = false;
     }
 
-    nodeArr = vector<vector<pair<int, int>>>(T);
+    for (int i = 0; i < nodeCnt; ++i) {
+        int x, y, z;
+        cin >> x >> y >> z;
+        Node *node = new Node();
+        node->x = x;
+        node->y = y;
+        node->z = z;
+        node->id = i;
 
+        Node2 xEdge = Node2();
+        Node2 yEdge = Node2();
+        Node2 zEdge = Node2();
 
-//    for (int i = 0; i < T; ++i) {
-//        for (int j = 0; j < T; ++j) {
-//            arr[i][j] = INF;
-//        }
-//        cout << endl;
-//    }
+        xEdge.node = node;
+        yEdge.node = node;
+        zEdge.node = node;
 
-
-
-//    cout << "노드 출력:" << endl;
-//    for (int i = 0; i < count; ++i) {
-//        for (int j = 0; j < count; ++j) {
-//            cout << node[i][j] << " ";
-//        }
-//        cout << endl;
-//    }
-//    cout << endl;
-
-    vector<Node> vec;
-
-    for (int i = 0; i < edgeCount; ++i) {
-        int a, b, w;
-        cin >> a >> b >> w;
-        a--;
-        b--;
-//        node[a][b] = w;
-//        node[b][a] = w;
-        Node node = Node();
-        node.a = a;
-        node.b = b;
-        node.w = w;
-        vec.push_back(node);
-        nodeArr[node.a].push_back(make_pair(node.b, node.w));
-        nodeArr[node.b].push_back(make_pair(node.a, node.w));
+        xArr.push_back(xEdge);
+        yArr.push_back(yEdge);
+        zArr.push_back(zEdge);
     }
 
 
-    std::sort(vec.begin(), vec.end(), compare);
+    std::sort(xArr.begin(), xArr.end(), compareX);
+    std::sort(yArr.begin(), yArr.end(), compareY);
+    std::sort(zArr.begin(), zArr.end(), compareZ);
+//
+//    cout << "\nx정렬:\n";
+//    for (int i = 0; i < nodeCnt; ++i) {
+//        xArr[i].node->print();
+//    }
+//    cout << "\ny정렬:\n";
+//    for (int i = 0; i < nodeCnt; ++i) {
+//        yArr[i].node->print();
+//    }
+//    cout << "\nz정렬:\n";
+//    for (int i = 0; i < nodeCnt; ++i) {
+//        zArr[i].node->print();
+//    }
+//    cout << '\n';
 
-//    for (int i = 0; i < nodeCount; ++i) {
-//        vec[i].print();
+
+    vector<Edge> vec;
+    for (int i = 0; i < nodeCnt - 1; ++i) {
+        int a = xArr[i].node->x;
+        int b = xArr[i + 1].node->x;
+        int aId = xArr[i].node->id;
+        int bId = xArr[i + 1].node->id;
+
+        int dist = abs(a - b);
+
+        vec.push_back(Edge(aId, bId, dist));
+    }
+
+    for (int i = 0; i < nodeCnt - 1; ++i) {
+        int a = yArr[i].node->y;
+        int b = yArr[i + 1].node->y;
+        int aId = yArr[i].node->id;
+        int bId = yArr[i + 1].node->id;
+
+
+
+
+        int dist = abs(a - b);
+
+        vec.push_back(Edge(aId, bId, dist));
+    }
+
+    for (int i = 0; i < nodeCnt - 1; ++i) {
+        int a = zArr[i].node->z;
+        int b = zArr[i + 1].node->z;
+        int aId = zArr[i].node->id;
+        int bId = zArr[i + 1].node->id;
+
+        int dist = abs(a - b);
+
+        vec.push_back(Edge(aId, bId, dist));
+    }
+
+    sort(vec.begin(), vec.end(), compareE);
+//    for (Edge e: vec) {
+//        cout << e.node[0] << " " << e.node[1]<<" "<<e.distance << endl;
 //    }
 
 
-    int minNode = vec[0].a;
-    visited[minNode] = true;
 
 
-    priority_queue<Node> que;
-    for (auto pa: nodeArr[minNode]) {
-        Node no = Node();
-        no.a = minNode;
-        no.b = pa.first;
-        no.w = pa.second;
-        que.push(no);
-//        cout << "push: ";
-//        no.print();
+
+    int set[nodeCnt];
+    for (int i = 0; i < nodeCnt; ++i) {
+        set[i] = i;
     }
-    while (!que.empty()) {
-        if (visited[que.top().b] == false) {
-//            Node n = que.top();
-//            n.print();
-            sum += que.top().w;
-            visited[que.top().b] = true;
 
-            int topB = que.top().b;
-            que.pop();
-
-            for (auto pa: nodeArr[topB]) {
-                if (visited[pa.first] == false) {
-                    Node no = Node();
-                    no.a = topB;
-                    no.b = pa.first;
-                    no.w = pa.second;
-                    que.push(no);
-//                    cout << "push: ";
-//                    no.print();
-//                    cout << "top: " << que.top().a << " " << que.top().b << " " << que.top().w<<endl;
-                }
-
-            }
-        } else {
-//            cout << "거절: ";
-//            Node n = que.top();
-//            n.print();
-            que.pop();
+//    cout << "!\n";
+    for (int i = 0; i < vec.size(); ++i) {
+        if (!find(set, vec[i].node[0] , vec[i].node[1] )) {
+            sum += vec[i].distance;
+//            cout << vec[i].node[0] << " " << vec[i].node[1]<<" "<<vec[i].distance << endl;
+            unionParent(set, vec[i].node[0] , vec[i].node[1] );
         }
-
     }
+
     cout << sum;
-
-    //5 5
-    //1 4 3
-    //2 3 3
-    //4 3 5
-    //2 1 6
-    //4 5 9
-
 }
 
 //3 2
