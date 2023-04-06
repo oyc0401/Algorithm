@@ -10,78 +10,62 @@
 
 using namespace std;
 
-//1,000,000,000
-class Node {
-public:
-    int x, y, z;
-    int id;
-
-    void print() {
-        cout << id << " (" << x << ", " << y << ", " << z << ")" << endl;
-
-
-    }
+class Obj {
+    int e;
+    int index;
 };
 
-class Node2 {
+template<typename T>
+class MinSegTree {
 public:
-    Node *node;
-};
 
-
-class Edge {
-public:
-    int node[2];
-    int distance;
-
-    Edge(int a, int b, int distance) {
-        this->node[0] = a;
-        this->node[1] = b;
-        this->distance = distance;
-    }
-
-    bool operator<(Edge &edge) {
-        return this->distance < edge.distance;
+    MinSegTree(vector<T> &arr) {
+        int len = arr.size();
+        tree = vector<T>(4 * len);
+        init(arr, 1, 0, len - 1);
     }
 
 
+    T init(vector<T> &arr, int node, int start, int end) {
+        if (start == end)    // 노드가 리프 노드인 경우
+            return tree[node] = arr[start];    // 배열의 그 원소를 가져야 함
+
+        int mid = (start + end) / 2;
+//    cout << start << " " << mid << " " << end << endl;
+
+        // 구간 합을 구하는 경우
+//    return tree[node] = mininit(arr, tree, node * 2, start, mid) + mininit(arr, tree, node * 2 + 1, mid + 1, end);
+
+        // 구간의 최솟값을 구하는 경우도 비슷하게 해줄 수 있다.
+        return tree[node] = min(init(arr, node * 2, start, mid), init(arr, node * 2 + 1, mid + 1, end));
+    }
+
+    T sum(int node, int start, int end, int left, int right) {
+        // case 1: [start, end] 앞 뒤에 [left, right]가 있는 경우,
+        // 겹치지 않기 때문에 탐색을 더 이상 할 필요가 없다.
+        if (left > end || right < start) return 1000000001;
+
+        // case 2: [start, end]가 [left, right]에 포함
+        if (left <= start && end <= right) return tree[node];
+
+        // case 3, 4: 왼쪽 자식과 오른쪽 자식을 루트로 하는 트리에서 다시 탐색 시작
+        int mid = (start + end) / 2;
+        return min(sum(node * 2, start, mid, left, right), sum(node * 2 + 1, mid + 1, end, left, right));
+    }
+
+    T update(int node, int start, int end, int index, T val) {
+        if (index > end || index < start) return tree[node];
+        if (start == end) return tree[node] = val;
+        int mid = start + (end - start) / 2;
+        return tree[node] = min(update(node * 2, start, mid, index, val),
+                                update(node * 2 + 1, mid + 1, end, index, val));
+
+    }
+
+
+private:
+    vector<T> tree;
 };
-
-bool compareE(Edge &edge1, Edge &edge2) {
-    return edge1.distance < edge2.distance;
-}
-
-bool compareX(Node2 a, Node2 b) {
-    return a.node->x < b.node->x;
-}
-
-bool compareY(Node2 a, Node2 b) {
-    return a.node->y < b.node->y;
-}
-
-bool compareZ(Node2 a, Node2 b) {
-    return a.node->z < b.node->z;
-}
-
-
-int getParent(int set[], int x) {
-    if (set[x] == x) return x;
-    return set[x] = getParent(set, set[x]);
-}
-
-void unionParent(int set[], int a, int b) {
-    a = getParent(set, a);
-    b = getParent(set, b);
-    if (a < b) set[b] = a;
-    else set[a] = b;
-}
-
-int find(int set[], int a, int b) {
-    a = getParent(set, a);
-    b = getParent(set, b);
-    if (a == b) return 1;
-    else return 0;
-}
 
 
 // 1000000000000000000
@@ -91,128 +75,37 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
 
+    int len, sumLen;
+    cin >> len;
 
-    vector<Node2> xArr;
-    vector<Node2> yArr;
-    vector<Node2> zArr;
-
-    long long sum = 0;
-
-    int nodeCnt;
-    cin >> nodeCnt;
-
-    int visited[nodeCnt];
-    for (int i = 0; i < nodeCnt; ++i) {
-        visited[i] = false;
+    vector<long long> vec;
+    for (int i = 0; i < len; ++i) {
+        int n;
+        cin >> n;
+        vec.push_back(n);
     }
+    cin >> sumLen;
 
-    for (int i = 0; i < nodeCnt; ++i) {
-        int x, y, z;
-        cin >> x >> y >> z;
-        Node *node = new Node();
-        node->x = x;
-        node->y = y;
-        node->z = z;
-        node->id = i;
+    MinSegTree<long long> segTree(vec);
 
-        Node2 xEdge = Node2();
-        Node2 yEdge = Node2();
-        Node2 zEdge = Node2();
+    for (int i = 0; i < sumLen; ++i) {
+        int M, a, b;
+        cin >> M >> a >> b;
+        if (M == 1) {
+            // 업데이트
+            long long val = b;
+            int index = a - 1;
+            vec[index] = val;
+            segTree.update(1, 0, len - 1, index, val);
+        } else {
+            int left = a - 1;
+            int right = b - 1;
+            long long minS = segTree.sum(1, 0, len - 1, left, right);
 
-        xEdge.node = node;
-        yEdge.node = node;
-        zEdge.node = node;
-
-        xArr.push_back(xEdge);
-        yArr.push_back(yEdge);
-        zArr.push_back(zEdge);
-    }
-
-
-    std::sort(xArr.begin(), xArr.end(), compareX);
-    std::sort(yArr.begin(), yArr.end(), compareY);
-    std::sort(zArr.begin(), zArr.end(), compareZ);
-//
-//    cout << "\nx정렬:\n";
-//    for (int i = 0; i < nodeCnt; ++i) {
-//        xArr[i].node->print();
-//    }
-//    cout << "\ny정렬:\n";
-//    for (int i = 0; i < nodeCnt; ++i) {
-//        yArr[i].node->print();
-//    }
-//    cout << "\nz정렬:\n";
-//    for (int i = 0; i < nodeCnt; ++i) {
-//        zArr[i].node->print();
-//    }
-//    cout << '\n';
-
-
-    vector<Edge> vec;
-    for (int i = 0; i < nodeCnt - 1; ++i) {
-        int a = xArr[i].node->x;
-        int b = xArr[i + 1].node->x;
-        int aId = xArr[i].node->id;
-        int bId = xArr[i + 1].node->id;
-
-        int dist = abs(a - b);
-
-        vec.push_back(Edge(aId, bId, dist));
-    }
-
-    for (int i = 0; i < nodeCnt - 1; ++i) {
-        int a = yArr[i].node->y;
-        int b = yArr[i + 1].node->y;
-        int aId = yArr[i].node->id;
-        int bId = yArr[i + 1].node->id;
-
-
-
-
-        int dist = abs(a - b);
-
-        vec.push_back(Edge(aId, bId, dist));
-    }
-
-    for (int i = 0; i < nodeCnt - 1; ++i) {
-        int a = zArr[i].node->z;
-        int b = zArr[i + 1].node->z;
-        int aId = zArr[i].node->id;
-        int bId = zArr[i + 1].node->id;
-
-        int dist = abs(a - b);
-
-        vec.push_back(Edge(aId, bId, dist));
-    }
-
-    sort(vec.begin(), vec.end(), compareE);
-//    for (Edge e: vec) {
-//        cout << e.node[0] << " " << e.node[1]<<" "<<e.distance << endl;
-//    }
-
-
-
-
-
-    int set[nodeCnt];
-    for (int i = 0; i < nodeCnt; ++i) {
-        set[i] = i;
-    }
-
-//    cout << "!\n";
-    for (int i = 0; i < vec.size(); ++i) {
-        if (!find(set, vec[i].node[0] , vec[i].node[1] )) {
-            sum += vec[i].distance;
-//            cout << vec[i].node[0] << " " << vec[i].node[1]<<" "<<vec[i].distance << endl;
-            unionParent(set, vec[i].node[0] , vec[i].node[1] );
+            cout << minS << '\n';
         }
+
     }
 
-    cout << sum;
+
 }
-
-//3 2
-//1 2 1
-//2 3 2
-
-
