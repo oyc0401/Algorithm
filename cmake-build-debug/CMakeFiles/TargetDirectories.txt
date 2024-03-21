@@ -1,3 +1,0 @@
-/Users/oyuchan/CLionProjects/algorithm/cmake-build-debug/CMakeFiles/vacation.dir
-/Users/oyuchan/CLionProjects/algorithm/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/oyuchan/CLionProjects/algorithm/cmake-build-debug/CMakeFiles/rebuild_cache.dir
